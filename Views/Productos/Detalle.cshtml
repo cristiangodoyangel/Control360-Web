@@ -1,0 +1,127 @@
+﻿@model Producto
+
+@{
+    ViewData["Title"] = "Detalle del Producto";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-3 text-primary">Detalle del Producto</h2>
+
+    <div class="card shadow-lg">
+        <div class="card-body">
+            <div class="row">
+                <!-- Imagen del producto -->
+                <div class="col-md-4 text-center">
+                    <img src="~/images/@Model.Imagen" alt="Imagen de @Model.NombreTecnico" class="img-fluid rounded shadow-sm" width="200">
+                </div>
+                <!-- Datos del producto -->
+                <div class="col-md-8">
+                    <h3 class="card-title text-dark">@Model.NombreTecnico</h3>
+                    <table class="table table-bordered mt-3">
+                        <tbody>
+                            <tr>
+                                <th class="bg-light">Marca</th>
+                                <td>@Model.Marca</td>
+                            </tr>
+                            <tr>
+                                <th class="bg-light">Descripción</th>
+                                <td>@Model.Descripcion</td>
+                            </tr>
+                            <tr>
+                                <th class="bg-light">Stock</th>
+                                <td class="fw-bold">@Model.Cantidad @Model.UnidadMedida</td>
+                            </tr>
+                            <tr>
+                                <th class="bg-light">Ubicación</th>
+                                <td>@Model.Ubicacion</td>
+                            </tr>
+                            <tr>
+                                <th class="bg-light">Proveedor</th>
+                                <td>@ViewBag.NombreProveedor</td> <!-- ✅ Se muestra el nombre del proveedor -->
+                            </tr>
+                            <tr>
+                                <th class="bg-light">Categoría</th>
+                                <td>@Model.Categoria</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón de regreso -->
+    <div class="mt-4 text-end">
+        <a href="@Url.Action("Index", "Productos")" class="btn btn-secondary btn-lg">Volver al inventario</a>
+    </div>
+</div>
+
+
+
+<style>
+  
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .pagination-separated .paginate_button {
+        margin: 0 8px;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #fcd8b7;
+    }
+
+    .fila-hover:hover {
+        background-color: #fbdfc5;
+    }
+
+    .mb-4 {
+        margin-bottom: 3rem !important;
+    }
+
+    .table-light th {
+        background-color: #f8f9fa;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+    /* ✅ Agrega espacio entre el cuadro de búsqueda y la tabla */
+    .dataTables_wrapper .dataTables_filter {
+        margin-bottom: 15px;
+    }
+
+    /* ✅ Agregar borde superior e inferior a la tabla */
+    .table-bordered {
+        border: 1px solid #333 !important;
+    }
+
+        .table-bordered th,
+        .table-bordered td {
+            border: 0.5px solid #ccc !important;
+        }
+
+    /* ✅ Cambia el color del "+" cuando la tabla es responsiva */
+    table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control::before {
+        background-color: #f06529 !important; /* Naranja */
+        color: white !important; /* Color del "+" */
+        border-radius: 50% !important;
+        width: 18px !important;
+        height: 18px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-weight: bold !important;
+    }
+
+    /* ✅ Cambia el color del "-" cuando la fila está expandida */
+    table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td.dtr-control::before {
+        background-color: #d9531e !important; /* Gris */
+        color: black !important; /* Color del "-" */
+    }
+</style>

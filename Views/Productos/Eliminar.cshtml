@@ -1,0 +1,33 @@
+﻿@model Inventario360.Models.Producto
+
+@{
+    ViewData["Title"] = "Eliminar Producto";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-3 text-danger">❌ Eliminar Producto</h2>
+
+    <div class="card shadow-lg p-4 border-danger">
+        <div class="alert alert-warning">
+            <p>⚠️ <strong>Advertencia:</strong> Esta acción no se puede deshacer.</p>
+        </div>
+
+        <p>¿Estás seguro de que deseas eliminar el producto <strong class="text-primary">@Model.NombreTecnico</strong>?</p>
+
+        <!-- Mostrar la categoría del producto -->
+        <p><strong>Categoría:</strong> <span class="text-dark">@Model.Categoria</span></p>
+
+        <div class="text-center mb-3">
+            <img src="~/images/@Model.Imagen" class="img-fluid rounded shadow-sm" width="150" />
+        </div>
+
+        <form asp-action="Eliminar" method="post">
+            <input type="hidden" asp-for="ITEM" />
+
+            <div class="text-end">
+                <button type="submit" class="btn btn-danger">🗑️ Sí, eliminar</button>
+                <a asp-action="Index" class="btn btn-secondary">❌ Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,82 @@
+## Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Build results
+bin/
+obj/
+[Bb]uild/
+[Bb]uild[Ll]og.*
+*.log
+
+## ASP.NET temp files
+App_Data/Logs/
+**/App_Data/Logs/*
+*.dbmdl
+*.bak
+*.ldf
+*.mdf
+
+## IIS Express
+/.vs/
+/iisexpress/
+
+## Rider & JetBrains
+.idea/
+*.sln.iml
+
+## Web-specific
+node_modules/
+bower_components/
+wwwroot/
+dist/
+.bundle/
+
+## Packages
+*.nupkg
+*.snupkg
+*.nuspec
+packages/
+*.vsix
+.vscode/
+
+## Others
+_ReSharper*/
+*.DotSettings.user
+*.DotCover
+*.orig
+*.rej
+*.log
+*.tmp
+*.cache
+
+## User-specific files
+*.tss
+*.vssscc
+*.psess
+*.vsp
+*.pdb
+*.db
+*.bak
+*.db-shm
+*.db-wal
+
+## Publish
+*.Publish.xml
+*.pubxml
+*.publishproj
+*.deploy.cmd
+*.deploy-readme.txt
+
+# SQL Server files
+*.mdf
+*.ldf
+
+# Web deploy
+Properties/PublishProfiles/
+
+# Local files
+*.local.json

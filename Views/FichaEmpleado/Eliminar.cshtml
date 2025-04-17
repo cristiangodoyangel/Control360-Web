@@ -1,0 +1,16 @@
+﻿<!-- Eliminar.cshtml - Confirmación para eliminar una ficha -->
+@model Inventario360.Models.FichaEmpleado
+@{
+    ViewData["Title"] = "Eliminar Ficha de Empleado";
+}
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">🗑 Eliminar Ficha de Empleado</h2>
+    <div class="card p-4 shadow">
+        <p>¿Estás seguro de que deseas eliminar la ficha de <strong>@Model.EmpleadoID</strong>?</p>
+        <form asp-action="Eliminar" method="post">
+            <input type="hidden" asp-for="ID" />
+            <button type="submit" class="btn btn-orange">Sí, eliminar</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>

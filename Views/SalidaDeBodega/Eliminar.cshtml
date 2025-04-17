@@ -1,0 +1,49 @@
+﻿@model Inventario360.Models.SalidaDeBodega
+
+@{
+    ViewData["Title"] = "Eliminar Salida de Bodega";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-3 text-danger">❌ Eliminar Salida de Bodega</h2>
+
+    <div class="card shadow-lg p-4 border-danger">
+        <div class="alert alert-warning">
+            <p>⚠️ <strong>Advertencia:</strong> Esta acción no se puede deshacer.</p>
+        </div>
+
+        <p>¿Estás seguro de que deseas eliminar la salida de bodega registrada el <strong class="text-primary">@Model.Fecha?.ToString("dd-MM-yyyy HH:mm")</strong>?</p>
+
+        <form id="formEliminar">
+            <input type="hidden" id="salidaId" value="@Model.ID" />
+
+            <div class="text-end">
+                <button type="button" class="btn btn-danger" id="btnEliminar">🗑️ Sí, eliminar</button>
+                <a asp-action="Index" class="btn btn-secondary">❌ Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $("#btnEliminar").click(function () {
+            var id = $("#salidaId").val();
+            $.ajax({
+                url: "/SalidaDeBodega/Eliminar",
+                type: "POST",
+                data: { id: id },
+                success: function (response) {
+                    if (response.success) {
+                        window.location.href = "/SalidaDeBodega/Index";
+                    } else {
+                        alert("Error: " + response.message);
+                    }
+                },
+                error: function () {
+                    alert("Hubo un error al eliminar la salida de bodega.");
+                }
+            });
+        });
+    </script>
+}

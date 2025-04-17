@@ -1,0 +1,214 @@
+﻿@model IEnumerable<Inventario360.Models.FichaCamioneta>
+
+@{
+    ViewData["Title"] = "Fichas de Camionetas";
+    var fechaHoy = DateTime.Now;
+    var resumen = new Dictionary<string, (int Vigentes, int PorVencer, int Vencidos)>()
+    {
+        { "Permiso", (0, 0, 0) },
+        { "Soap", (0, 0, 0) },
+        { "Antivuelcos", (0, 0, 0) },
+        { "Laminas", (0, 0, 0) },
+        { "GPS", (0, 0, 0) },
+        { "Mantenimiento", (0, 0, 0) }
+    };
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">Fichas de Camionetas</h2>
+    <div class="text-end mb-3">
+        <a asp-action="Crear" class="btn btn-orange me-2">➕ Nueva Ficha</a>
+        <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalEditarCamionetas">✏️ Editar</button>
+    </div>
+
+    <!-- 📊 Carrusel de Gráficos -->
+    <h5 class="titulo-seccion mt-5">📊 Estado Documental</h5>
+    <div class="d-flex justify-content-center align-items-center gap-3">
+        <button id="prevGrafico" class="btn btn-orange">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <canvas id="graficoCamionetas" class="grafico-camionetas"></canvas>
+
+        <button id="nextGrafico" class="btn btn-orange">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+    <p class="text-center mt-2 fw-bold" id="tituloGrafico"></p>
+
+
+    @foreach (var tipo in resumen.Keys)
+    {
+        <h5 class="titulo-seccion mt-4">📄 @tipo</h5>
+        <table id="tabla@tipo" class="table table-bordered table-sm table-hover display nowrap" style="width:100%">
+            <thead class="table-light text-center">
+                <tr>
+                    <th>Patente</th>
+                    <th>@tipo Vence</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var c in Model)
+                {
+                    DateTime? fecha = tipo switch
+                    {
+                        "Permiso" => c.FechaPermisoCirculacion,
+                        "Soap" => c.FechaSoap,
+                        "Antivuelcos" => c.FechaAntivuelcos,
+                        "Laminas" => c.FechaLaminas,
+                        "GPS" => c.FechaGPS,
+                        "Mantenimiento" => c.FechaMantenimiento,
+                        _ => null
+                    };
+
+                    var clase = "table-success";
+                    if (fecha.HasValue)
+                    {
+                        var dias = (fecha.Value - fechaHoy).TotalDays;
+                        if (dias <= 0) { clase = "table-danger"; resumen[tipo] = (resumen[tipo].Vigentes, resumen[tipo].PorVencer, resumen[tipo].Vencidos + 1); }
+                        else if (dias <= 30) { clase = "table-warning"; resumen[tipo] = (resumen[tipo].Vigentes, resumen[tipo].PorVencer + 1, resumen[tipo].Vencidos); }
+                        else { resumen[tipo] = (resumen[tipo].Vigentes + 1, resumen[tipo].PorVencer, resumen[tipo].Vencidos); }
+                    }
+
+                    <tr class="@clase">
+                        <td>@c.Patente</td>
+                        <td>@(fecha?.ToString("dd-MM-yyyy") ?? "N/A")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+
+
+
+
+
+    <!-- Modal para Editar Camionetas -->
+    <div class="modal fade" id="modalEditarCamionetas" tabindex="-1" aria-labelledby="modalEditarLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title" id="modalEditarLabel">Editar Camionetas</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered table-sm table-hover">
+                        <thead class="table-light text-center">
+                            <tr>
+                                <th>Patente</th>
+                                <th>Marca</th>
+                                <th>Modelo</th>
+                                <th>Año</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var camioneta in Model)
+                            {
+                                <tr>
+                                    <td>@camioneta.Patente</td>
+                                    <td>@camioneta.Marca</td>
+                                    <td>@camioneta.Modelo</td>
+                                    <td>@camioneta.Año</td>
+                                    <td>
+                                        <a asp-action="Editar" asp-route-id="@camioneta.ID" class="btn btn-sm btn-orange">Editar</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            const tablas = ["Permiso", "Soap", "Antivuelcos", "Laminas", "GPS", "Mantenimiento"];
+            tablas.forEach(id => $("#tabla" + id).DataTable({
+                responsive: true,
+                language: { url: "//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json" }
+            }));
+
+            const datos = [
+        @foreach (var k in resumen.Keys)
+        {
+            var r = resumen[k];
+            <text>{ label: "@k", data: [@r.Vigentes, @r.PorVencer, @r.Vencidos], backgroundColor: ['#28a745', '#ffc107', '#dc3545'], labels: ["Vigente", "Por Vencer", "Vencido"] },</text>
+        }
+            ];
+
+            let index = 0;
+            const ctx = document.getElementById("graficoCamionetas").getContext("2d");
+            let grafico;
+
+            function render() {
+                const d = datos[index];
+                if (grafico) grafico.destroy();
+                grafico = new Chart(ctx, {
+                    type: "bar",
+                    data: { labels: d.labels, datasets: [{ label: d.label, data: d.data, backgroundColor: d.backgroundColor }] },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+                });
+                $("#tituloGrafico").text("📌 " + d.label);
+            }
+
+            $("#prevGrafico").click(() => { index = (index - 1 + datos.length) % datos.length; render(); });
+            $("#nextGrafico").click(() => { index = (index + 1) % datos.length; render(); });
+            render();
+        });
+    </script>
+}
+<style>
+
+
+    .table td, .table th {
+        text-align: center;
+        vertical-align: middle;
+        font-size: 14px;
+        padding: 6px;
+    }
+
+    .dataTables_wrapper .dataTables_filter {
+        margin-bottom: 15px;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #fcd8b7;
+    }
+
+    .titulo-seccion {
+        background-color: #f06529;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 5px;
+        margin-top: 40px;
+        font-weight: bold;
+    }
+
+    .grafico-camionetas {
+        max-width: 600px;
+        height: 400px;
+    }
+
+    /* ✅ Agregar borde superior e inferior a la tabla */
+    .table-bordered {
+        border: 1px solid #333 !important;
+    }
+
+        .table-bordered th,
+        .table-bordered td {
+            border: 0.5px solid #ccc !important;
+        }
+</style>
