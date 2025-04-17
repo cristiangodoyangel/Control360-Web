@@ -1,79 +1,74 @@
-﻿@model Inventario360.Models.Producto
+﻿@model Inventario360.Web.Models.Producto
 
 @{
-    ViewData["Title"] = "Editar Producto";
+    ViewBag.Title = "Editar Producto";
 }
 
 <div class="container mt-4">
     <h2 class="mb-3 text-orange">Editar Producto</h2>
 
     <div class="card shadow-lg p-4">
-        <form asp-action="Editar" method="post" enctype="multipart/form-data">
-            <input type="hidden" asp-for="ITEM" />
+        @using (Html.BeginForm("Editar", "Productos", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.ITEM)
 
             <div class="mb-3">
                 <label class="form-label">Nombre Técnico</label>
-                <input asp-for="NombreTecnico" class="form-control" required />
+                @Html.TextBoxFor(m => m.NombreTecnico, new { @class = "form-control", required = "required" })
             </div>
 
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Medida</label>
-                    <input asp-for="Medida" class="form-control" />
+                    @Html.TextBoxFor(m => m.Medida, new { @class = "form-control" })
                 </div>
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Unidad de Medida</label>
-                    <input asp-for="UnidadMedida" class="form-control" />
+                    @Html.TextBoxFor(m => m.UnidadMedida, new { @class = "form-control" })
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Marca</label>
-                    <input asp-for="Marca" class="form-control" />
+                    @Html.TextBoxFor(m => m.Marca, new { @class = "form-control" })
                 </div>
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Cantidad</label>
-                    <input asp-for="Cantidad" class="form-control" type="number" />
+                    @Html.TextBoxFor(m => m.Cantidad, new { @class = "form-control", type = "number" })
                 </div>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Descripción</label>
-                <textarea asp-for="Descripcion" class="form-control" rows="3"></textarea>
+                @Html.TextAreaFor(m => m.Descripcion, new { @class = "form-control", rows = 3 })
             </div>
 
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Ubicación</label>
-                    <input asp-for="Ubicacion" class="form-control" />
+                    @Html.TextBoxFor(m => m.Ubicacion, new { @class = "form-control" })
                 </div>
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Estado</label>
-                    <select asp-for="Estado" class="form-control">
-                        <option value="Nuevo">Nuevo</option>
-                        <option value="Usado">Usado</option>
-                    </select>
+                    @Html.DropDownListFor(m => m.Estado, new SelectList(new[] { "Nuevo", "Usado" }, Model.Estado), "Seleccione estado", new { @class = "form-control" })
                 </div>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Proveedor</label>
-                <select asp-for="Proveedor" class="form-control" asp-items="ViewBag.Proveedores">
-                    <option value="">Seleccione un proveedor</option>
-                </select>
+                @Html.DropDownListFor(m => m.Proveedor, ViewBag.Proveedores as SelectList, "Seleccione un proveedor", new { @class = "form-control" })
             </div>
 
-
-            <!-- Campo de Categoría -->
             <div class="mb-3">
                 <label class="form-label">Categoría</label>
-                <input asp-for="Categoria" class="form-control" placeholder="Ingrese la categoría" />
+                @Html.TextBoxFor(m => m.Categoria, new { @class = "form-control", placeholder = "Ingrese la categoría" })
             </div>
 
             <!-- Vista previa de la imagen actual -->
             <div class="mb-3 text-center">
-                <label class="form-label">Imagen Actual</label><br>
+                <label class="form-label">Imagen Actual</label><br />
                 @if (!string.IsNullOrEmpty(Model.Imagen))
                 {
                     <img src="@Url.Content("~/images/" + Model.Imagen)" class="img-fluid rounded shadow-sm" width="150" />
@@ -84,8 +79,6 @@
                 }
             </div>
 
-
-            <!-- Subida de nueva imagen -->
             <div class="mb-3">
                 <label class="form-label">Subir Nueva Imagen</label>
                 <input type="file" name="ImagenArchivo" class="form-control" />
@@ -93,10 +86,86 @@
 
             <div class="text-end">
                 <button type="submit" class="btn btn-orange">💾 Guardar Cambios</button>
-                <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-secondary" })
             </div>
-        </form>
+        }
     </div>
 </div>
 
+<style>
+    .text-orange {
+        color: #f06529;
+    }
 
+    .btn-orange {
+        background-color: #f06529 !important;
+        border-radius: 5px;
+        border-color: #f06529 !important;
+        color: white !important;
+    }
+
+        .btn-orange:hover {
+            background-color: #d9531e !important;
+            border-color: #d9531e !important;
+        }
+
+    .card {
+        border-radius: 10px;
+    }
+
+    .form-label {
+        font-weight: 600;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #fcd8b7;
+    }
+
+    .fila-hover:hover {
+        background-color: #fbdfc5;
+    }
+
+    .mb-4 {
+        margin-bottom: 3rem !important;
+    }
+
+    .table-light th {
+        background-color: #f8f9fa;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+    .table-bordered {
+        border: 1px solid #333 !important;
+    }
+
+        .table-bordered th,
+        .table-bordered td {
+            border: 0.5px solid #ccc !important;
+        }
+
+    table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control::before {
+        background-color: #f06529 !important;
+        color: white !important;
+        border-radius: 50% !important;
+        width: 18px !important;
+        height: 18px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-weight: bold !important;
+    }
+
+    table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td.dtr-control::before {
+        background-color: #d9531e !important;
+        color: black !important;
+    }
+</style>

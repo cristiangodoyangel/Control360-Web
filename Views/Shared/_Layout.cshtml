@@ -18,7 +18,97 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
 
     <style>
-        /* ... mismo CSS que enviaste ... */
+        .btn-orange {
+            background-color: #f06529 !important;
+            border-radius: 5px;
+            border-color: #f06529 !important;
+            color: white !important;
+        }
+
+            .btn-orange:hover {
+                background-color: #d9531e !important;
+                border-color: #d9531e !important;
+            }
+
+        .btn-icon {
+            background-color: transparent !important;
+            border: 1px solid #000000 !important;
+            color: #f06529 !important;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            padding: 0.3rem;
+        }
+
+            .btn-icon:hover {
+                color: #d9531e !important;
+            }
+
+        .card {
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+
+            .card:hover {
+                transform: scale(1.02);
+            }
+
+        .bg-orange {
+            background-color: #f1663b;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: white;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: white;
+        }
+
+        .navbar {
+            background-color: #f1663b;
+            padding: 15px;
+        }
+
+        .navbar-nav .nav-link {
+            font-size: 18px;
+            font-weight: bold;
+            color: white !important;
+            margin: 0 15px;
+        }
+
+        .dropdown-menu {
+            background-color: #f1663b !important;
+            border: none;
+        }
+
+            .dropdown-menu .dropdown-item {
+                color: white !important;
+            }
+
+                .dropdown-menu .dropdown-item:hover {
+                    background-color: #e25a32 !important;
+                }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-nav.mx-auto {
+            flex: 1;
+            justify-content: center;
+        }
+
+        .navbar-nav.ms-auto {
+            margin-left: auto;
+        }
     </style>
 
     @RenderSection("Styles", required: false)
@@ -29,7 +119,7 @@
         @if (Request.IsAuthenticated)
         {
             <div class="dropdown">
-                <button class="btn btn-orange dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                <button class="btn btn-orange dropdown-toggle" type="button" data-toggle="dropdown">
                     @nombreUsuario
                 </button>
                 <ul class="dropdown-menu">
@@ -52,7 +142,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
@@ -60,7 +150,7 @@
                 {
                     <ul class="navbar-nav mx-auto">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Bodega</a>
+                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Bodega</a>
                             <ul class="dropdown-menu">
                                 <li>@Html.ActionLink("Inventario", "Index", "Productos", null, new { @class = "dropdown-item" })</li>
                                 <li>@Html.ActionLink("Entrega de Materiales", "Index", "SalidaDeBodega", null, new { @class = "dropdown-item" })</li>
@@ -79,7 +169,7 @@
                         @if (esAdmin || esProyectos)
                         {
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Control de Activos</a>
+                                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Control de Activos</a>
                                 <ul class="dropdown-menu">
                                     <li>@Html.ActionLink("Control de Trabajadores", "Index", "FichaEmpleado", null, new { @class = "dropdown-item" })</li>
                                     <li>@Html.ActionLink("Control de Camionetas", "Index", "FichaCamioneta", null, new { @class = "dropdown-item" })</li>
@@ -92,7 +182,7 @@
                     {
                         <ul class="navbar-nav ms-auto">
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">PANEL CONTROL</a>
+                                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">PANEL CONTROL</a>
                                 <ul class="dropdown-menu">
                                     <li>@Html.ActionLink("Usuarios", "Index", "Usuarios", null, new { @class = "dropdown-item" })</li>
                                     <li>@Html.ActionLink("Proyectos", "Index", "Proyectos", null, new { @class = "dropdown-item" })</li>

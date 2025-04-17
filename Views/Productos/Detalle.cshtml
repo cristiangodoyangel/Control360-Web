@@ -1,7 +1,7 @@
-﻿@model Producto
+﻿@model Inventario360.Web.Models.Producto
 
 @{
-    ViewData["Title"] = "Detalle del Producto";
+    ViewBag.Title = "Detalle del Producto";
 }
 
 <div class="container mt-4">
@@ -12,7 +12,7 @@
             <div class="row">
                 <!-- Imagen del producto -->
                 <div class="col-md-4 text-center">
-                    <img src="~/images/@Model.Imagen" alt="Imagen de @Model.NombreTecnico" class="img-fluid rounded shadow-sm" width="200">
+                    <img src="@Url.Content("~/images/" + Model.Imagen)" alt="Imagen de @Model.NombreTecnico" class="img-fluid rounded shadow-sm" width="200" />
                 </div>
                 <!-- Datos del producto -->
                 <div class="col-md-8">
@@ -37,7 +37,7 @@
                             </tr>
                             <tr>
                                 <th class="bg-light">Proveedor</th>
-                                <td>@ViewBag.NombreProveedor</td> <!-- ✅ Se muestra el nombre del proveedor -->
+                                <td>@ViewBag.NombreProveedor</td>
                             </tr>
                             <tr>
                                 <th class="bg-light">Categoría</th>
@@ -52,15 +52,11 @@
 
     <!-- Botón de regreso -->
     <div class="mt-4 text-end">
-        <a href="@Url.Action("Index", "Productos")" class="btn btn-secondary btn-lg">Volver al inventario</a>
+        @Html.ActionLink("Volver al inventario", "Index", "Productos", null, new { @class = "btn btn-secondary btn-lg" })
     </div>
 </div>
 
-
-
 <style>
-  
-
     .table-responsive {
         overflow-x: auto;
     }
@@ -91,12 +87,10 @@
         vertical-align: middle;
     }
 
-    /* ✅ Agrega espacio entre el cuadro de búsqueda y la tabla */
     .dataTables_wrapper .dataTables_filter {
         margin-bottom: 15px;
     }
 
-    /* ✅ Agregar borde superior e inferior a la tabla */
     .table-bordered {
         border: 1px solid #333 !important;
     }
@@ -106,10 +100,9 @@
             border: 0.5px solid #ccc !important;
         }
 
-    /* ✅ Cambia el color del "+" cuando la tabla es responsiva */
     table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control::before {
-        background-color: #f06529 !important; /* Naranja */
-        color: white !important; /* Color del "+" */
+        background-color: #f06529 !important;
+        color: white !important;
         border-radius: 50% !important;
         width: 18px !important;
         height: 18px !important;
@@ -119,9 +112,8 @@
         font-weight: bold !important;
     }
 
-    /* ✅ Cambia el color del "-" cuando la fila está expandida */
     table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td.dtr-control::before {
-        background-color: #d9531e !important; /* Gris */
-        color: black !important; /* Color del "-" */
+        background-color: #d9531e !important;
+        color: black !important;
     }
 </style>

@@ -10,8 +10,13 @@ namespace Inventario360.Web.Controllers
     {
         public ActionResult Index()
         {
+            ViewBag.NombreUsuario = User.Identity.IsAuthenticated ? User.Identity.Name : "Invitado";
+            ViewBag.EsAdmin = User.IsInRole("Administrador");
+            ViewBag.EsProyectos = User.IsInRole("Proyectos");
+
             return View();
         }
+
 
         public ActionResult About()
         {

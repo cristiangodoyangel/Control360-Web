@@ -1,7 +1,7 @@
-﻿@model Inventario360.Models.Producto
+﻿@model Inventario360.Web.Models.Producto
 
 @{
-    ViewData["Title"] = "Eliminar Producto";
+    ViewBag.Title = "Eliminar Producto";
 }
 
 <div class="container mt-4">
@@ -14,20 +14,84 @@
 
         <p>¿Estás seguro de que deseas eliminar el producto <strong class="text-primary">@Model.NombreTecnico</strong>?</p>
 
-        <!-- Mostrar la categoría del producto -->
         <p><strong>Categoría:</strong> <span class="text-dark">@Model.Categoria</span></p>
 
         <div class="text-center mb-3">
-            <img src="~/images/@Model.Imagen" class="img-fluid rounded shadow-sm" width="150" />
+            <img src="@Url.Content("~/images/" + Model.Imagen)" class="img-fluid rounded shadow-sm" width="150" />
         </div>
 
-        <form asp-action="Eliminar" method="post">
-            <input type="hidden" asp-for="ITEM" />
+        @using (Html.BeginForm("Eliminar", "Productos", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.ITEM)
 
             <div class="text-end">
                 <button type="submit" class="btn btn-danger">🗑️ Sí, eliminar</button>
-                <a asp-action="Index" class="btn btn-secondary">❌ Cancelar</a>
+                @Html.ActionLink("❌ Cancelar", "Index", null, new { @class = "btn btn-secondary" })
             </div>
-        </form>
+        }
     </div>
 </div>
+
+<style>
+    .text-danger {
+        color: #dc3545 !important;
+    }
+
+    .text-primary {
+        color: #0d6efd !important;
+    }
+
+    .border-danger {
+        border: 1px solid #dc3545 !important;
+    }
+
+    .card {
+        border-radius: 10px;
+    }
+
+    .alert-warning {
+        background-color: #fff3cd;
+        border-color: #ffeeba;
+        color: #856404;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+        color: white;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+        border-color: #bd2130;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        color: white;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+    }
+
+    .text-end {
+        text-align: end;
+    }
+
+    .container {
+        max-width: 720px;
+    }
+
+    .img-fluid {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .shadow-lg {
+        box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+    }
+</style>

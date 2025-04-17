@@ -18,6 +18,7 @@ namespace Inventario360.Web
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             DependencyConfig.RegisterDependencies();
 
+
         }
     }
 }
