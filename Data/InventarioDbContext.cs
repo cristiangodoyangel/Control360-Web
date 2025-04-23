@@ -7,9 +7,11 @@ namespace Inventario360.Web.Data
     {
         public InventarioDbContext() : base("DefaultConnection") { }
 
+        public DbSet<Producto> Producto { get; set; }
+
         /*public DbSet<SalidaDeBodega> SalidaDeBodega { get; set; }
         public DbSet<DetalleSalidaDeBodega> DetalleSalidaDeBodega { get; set; }
-        public DbSet<Producto> Producto { get; set; }
+       
         public DbSet<SolicitudDeMaterial> SolicitudDeMaterial { get; set; }
         public DbSet<Empleado> Empleado { get; set; }
         public DbSet<Proveedor> Proveedor { get; set; }
