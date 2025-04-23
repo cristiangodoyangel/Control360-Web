@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Inventario360.Web.Models.Producto>
+
+@{
+    ViewBag.Title = "Productos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="mb-3">Listado de Productos</h2>
+
+<p>
+    @Html.ActionLink("Crear nuevo producto", "Crear", null, new { @class = "btn btn-success" })
+</p>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-warning">
+        No hay productos registrados.
+    </div>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Nombre Técnico</th>
+                <th>Medida</th>
+                <th>Unidad</th>
+                <th>Marca</th>
+                <th>Categoría</th>
+                <th>Cantidad</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.NombreTecnico</td>
+                    <td>@item.Medida</td>
+                    <td>@item.UnidadMedida</td>
+                    <td>@item.Marca</td>
+                    <td>@item.Categoria</td>
+                    <td>@item.Cantidad</td>
+                    <td>
+                        @Html.ActionLink("Editar", "Editar", new { id = item.ITEM }, new { @class = "btn btn-sm btn-primary" }) |
+                        @Html.ActionLink("Detalle", "Detalle", new { id = item.ITEM }, new { @class = "btn btn-sm btn-info" }) |
+                        @Html.ActionLink("Eliminar", "Eliminar", new { id = item.ITEM }, new { @class = "btn btn-sm btn-danger" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

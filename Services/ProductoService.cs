@@ -17,7 +17,10 @@ namespace Inventario360.Web.Services
 
         public List<Producto> ObtenerTodos()
         {
-            return _context.Producto.ToList();
+            return _context.Database.SqlQuery<Producto>(
+                @"SELECT ITEM, Cantidad, NombreTecnico, Medida, UnidadMedida, Marca,
+                 Descripcion, Imagen, Proveedor, Ubicacion, Estado, Categoria
+          FROM Producto").ToList();
         }
 
         public Producto ObtenerPorId(int id)
