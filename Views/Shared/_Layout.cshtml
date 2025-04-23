@@ -1,0 +1,135 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+
+@{
+    string nombreUsuario = ViewBag.NombreUsuario ?? "Usuario";
+    bool esAdmin = ViewBag.EsAdmin ?? false;
+    bool esProyectos = ViewBag.EsProyectos ?? false;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title - Control360</title>
+    <link rel="stylesheet" href="~/Content/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/Content/Site.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
+
+    <style>
+        .btn-orange {
+            background-color: #f06529 !important;
+            border-radius: 5px;
+            border-color: #f06529 !important;
+            color: white !important;
+        }
+
+            .btn-orange:hover {
+                background-color: #d9531e !important;
+                border-color: #d9531e !important;
+            }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: white;
+        }
+
+            .header img {
+                max-height: 40px;
+            }
+
+        .navbar {
+            background-color: #f1663b;
+            padding: 15px;
+        }
+
+        .navbar-nav .nav-link {
+            font-size: 18px;
+            font-weight: bold;
+            color: white !important;
+            margin: 0 15px;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: white;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer {
+            background-color: #646464;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="header p-3 d-flex justify-content-between align-items-center bg-white border-bottom">
+        <img src="~/Content/images/logo.png" alt="Logo" height="40" />
+        @if (Request.IsAuthenticated)
+        {
+            <div class="dropdown">
+                <button class="btn btn-orange dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    @nombreUsuario
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                        @Html.ActionLink("Cambiar contraseña", "ChangePassword", "Manage", null, new { @class = "dropdown-item" })
+                    </li>
+                    <li>
+                        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { @class = "d-inline" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="dropdown-item">Cerrar sesión</button>
+                        }
+                    </li>
+                </ul>
+            </div>
+        }
+        else
+        {
+            @Html.ActionLink("Ingresar", "Login", "Account", null, new { @class = "btn btn-secondary" })
+        }
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                @if (Request.IsAuthenticated)
+                {
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item">
+                            @Html.ActionLink("Inventario", "Index", "Productos", null, new { @class = "nav-link" })
+                        </li>
+                    </ul>
+                }
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        @RenderBody()
+    </div>
+
+    <footer class="footer text-center p-3 mt-4">
+        &copy; 2025 - Control360 - Todos los derechos reservados.
+    </footer>
+
+    <script src="~/Scripts/jquery-3.6.0.min.js"></script>
+    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,9 @@
+.vs/
+packages/
+bin/
+obj/
+*.user
+*.suo
+*.sln.docstates
+*.cache
+_resharper*

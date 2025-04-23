@@ -1,0 +1,22 @@
+﻿@{
+    ViewBag.Title = "Inicio";
+}
+
+<main class="text-center mt-5">
+    <img src="~/Content/images/control360.png" alt="Control360" class="img-fluid" style="max-width: 100%; height: auto;" />
+
+    <div class="mt-4">
+        @if (ViewBag.Conectado != null && ViewBag.Conectado)
+        {
+            <div class="alert alert-success" role="alert">
+                ✅ Conexión a la base de datos exitosa.
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-danger" role="alert">
+                ❌ Error al conectar con la base de datos.
+            </div>
+        }
+    </div>
+</main>
