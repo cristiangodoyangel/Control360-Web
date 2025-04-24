@@ -1,53 +1,220 @@
 ﻿@model IEnumerable<Inventario360.Web.Models.Producto>
 
 @{
-    ViewBag.Title = "Productos";
+    ViewBag.Title = "Inventario de Productos";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2 class="mb-3">Listado de Productos</h2>
+<div class="container mt-3">
+    <h2 class="text-center my-2 d-flex align-items-center justify-content-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-warehouse me-2">
+            <path d="M22 8.35V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8.35A2 2 0 0 1 3.26 6.5l8-3.2a2 2 0 0 1 1.48 0l8 3.2A2 2 0 0 1 22 8.35Z" />
+            <path d="M6 18h12" />
+            <path d="M6 14h12" />
+            <rect width="12" height="12" x="6" y="10" />
+        </svg>
+        Inventario de Bodega
+    </h2>
 
-<p>
-    @Html.ActionLink("Crear nuevo producto", "Crear", null, new { @class = "btn btn-success" })
-</p>
-
-@if (!Model.Any())
-{
-    <div class="alert alert-warning">
-        No hay productos registrados.
-    </div>
-}
-else
-{
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>Nombre Técnico</th>
-                <th>Medida</th>
-                <th>Unidad</th>
-                <th>Marca</th>
-                <th>Categoría</th>
-                <th>Cantidad</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
+    <div class="row mb-3">
+        <div class="col-md-6"></div>
+        <div class="col-md-6 text-end">
+          
             {
-                <tr>
-                    <td>@item.NombreTecnico</td>
-                    <td>@item.Medida</td>
-                    <td>@item.UnidadMedida</td>
-                    <td>@item.Marca</td>
-                    <td>@item.Categoria</td>
-                    <td>@item.Cantidad</td>
-                    <td>
-                        @Html.ActionLink("Editar", "Editar", new { id = item.ITEM }, new { @class = "btn btn-sm btn-primary" }) |
-                        @Html.ActionLink("Detalle", "Detalle", new { id = item.ITEM }, new { @class = "btn btn-sm btn-info" }) |
-                        @Html.ActionLink("Eliminar", "Eliminar", new { id = item.ITEM }, new { @class = "btn btn-sm btn-danger" })
-                    </td>
-                </tr>
+                <a href="@Url.Action("Crear", "Productos")" class="btn btn-secondary"> Agregar Producto</a>
+                <a href="@Url.Action("Subir", "Productos")" class="btn btn-secondary"> Subir Excel</a>
             }
-        </tbody>
-    </table>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table id="productosTable" class="table table-striped table-bordered table-hover nowrap" width="100%">
+            <thead class="table-secondary">
+                <tr>
+                    <th class="p-3 d-none">ITEM</th>
+                    <th class="p-3 all">Nombre Técnico</th>
+                    <th class="p-3">Cantidad</th>
+                    <th class="p-3">Medida</th>
+                    <th class="p-3 d-none">Unidad de Medida</th>
+                    <th class="p-3 d-none">Marca</th>
+                    <th class="p-3">Ubicación</th>
+                    <th class="p-3">Estado</th>
+                    <th class="p-3">Categoría</th>
+                    <th class="p-3">Imagen</th>
+                  
+                    {
+                        <th class="p-3">Acciones</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var producto in Model)
+                {
+                    <tr id="fila-@producto.ITEM">
+                        <td class="d-none">@producto.ITEM</td>
+                        <td class="all">
+                            <a href="@Url.Action("Detalle", "Productos", new { id = producto.ITEM })" class="fw-bold text-dark">
+                                @(char.ToUpper(producto.NombreTecnico[0]) + producto.NombreTecnico.Substring(1).ToLower())
+                            </a>
+                        </td>
+                        <td class="@(producto.Cantidad == 0 ? "text-danger fw-bold" : "")">@producto.Cantidad</td>
+                        <td>@producto.Medida</td>
+                        <td class="d-none">@producto.UnidadMedida</td>
+                        <td class="d-none">@producto.Marca</td>
+                        <td>@producto.Ubicacion</td>
+                        <td>@producto.Estado</td>
+                        <td>@producto.Categoria</td>
+                        <td>
+                            <img src="~/images/@producto.Imagen" alt="Imagen Producto" width="50" height="50" />
+                        </td>
+                       
+                        {
+                            <td>
+                                <a href="@Url.Action("Editar", "Productos", new { id = producto.ITEM })" class="btn btn-icon">✏️</a>
+                                <button type="button" class="btn btn-icon"
+                                        onclick="confirmarEliminacion(@producto.ITEM, '@producto.NombreTecnico', '@producto.Categoria')">
+                                    🗑️
+                                </button>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modales: Confirmar Eliminación + Error -->
+<div class="modal fade" id="confirmarEliminarModal" tabindex="-1" aria-labelledby="confirmarEliminarLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmarEliminarLabel">Confirmar Eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Producto:</strong> <span id="modalProductoNombre"></span></p>
+                <p><strong>Categoría:</strong> <span id="modalProductoCategoria"></span></p>
+                <p>¿Seguro que deseas eliminar este producto?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-orange" id="btnConfirmarEliminar">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalErrorEliminar" tabindex="-1" aria-labelledby="modalErrorEliminarLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-danger">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="modalErrorEliminarLabel">No se puede eliminar</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p id="mensajeErrorEliminar">Ocurrió un error inesperado al intentar eliminar el producto.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (TempData["Nuevos"] != null || TempData["Actualizados"] != null)
+{
+    <div class="modal fade" id="resultadoExcelModal" tabindex="-1" aria-labelledby="resultadoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-orange text-white">
+                    <h5 class="modal-title" id="resultadoModalLabel">Carga de inventario completada</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>@TempData["Nuevos"]</strong> productos fueron <strong>nuevos</strong>.</p>
+                    <p><strong>@TempData["Actualizados"]</strong> productos fueron <strong>actualizados</strong>.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var modal = new bootstrap.Modal(document.getElementById('resultadoExcelModal'));
+            modal.show();
+        });
+    </script>
+}
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#productosTable').DataTable({
+                paging: true,
+                pageLength: 8,
+                responsive: true,
+                lengthMenu: [8, 25, 50],
+                language: {
+                    lengthMenu: "Mostrar _MENU_ registros por página",
+                    zeroRecords: "No se encontraron productos",
+                    info: "Mostrando página _PAGE_ de _PAGES_",
+                    infoEmpty: "No hay registros disponibles",
+                    infoFiltered: "(filtrado de _MAX_ registros en total)",
+                    search: "Buscar:",
+                    paginate: {
+                        first: "Primero",
+                        last: "Último",
+                        next: "Siguiente",
+                        previous: "Anterior"
+                    }
+                }
+            });
+        });
+
+        var productoIdAEliminar = null;
+
+        function confirmarEliminacion(id, nombre, categoria) {
+            productoIdAEliminar = id;
+            $("#modalProductoNombre").text(nombre);
+            $("#modalProductoCategoria").text(categoria || "Sin categoría");
+            var modal = new bootstrap.Modal(document.getElementById('confirmarEliminarModal'));
+            modal.show();
+        }
+
+        $(document).ready(function () {
+            $("#btnConfirmarEliminar").click(function () {
+                if (productoIdAEliminar) {
+                    $.ajax({
+                        url: "/Productos/Eliminar",
+                        type: "POST",
+                        data: { id: productoIdAEliminar },
+                        success: function (response) {
+                            if (response.success) {
+                                var table = $('#productosTable').DataTable();
+                                table.row($("#fila-" + productoIdAEliminar)).remove().draw();
+                                $("#confirmarEliminarModal").modal('hide');
+                            } else {
+                                $("#mensajeErrorEliminar").text(response.message || "No se pudo eliminar el producto.");
+                                var modalError = new bootstrap.Modal(document.getElementById('modalErrorEliminar'));
+                                modalError.show();
+                            }
+                        },
+                        error: function (xhr) {
+                            $("#mensajeErrorEliminar").text("Hubo un error al eliminar el producto.");
+                            var modalError = new bootstrap.Modal(document.getElementById('modalErrorEliminar'));
+                            modalError.show();
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 }
