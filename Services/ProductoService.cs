@@ -47,6 +47,7 @@ namespace Inventario360.Web.Services
         public void Actualizar(Producto producto)
         {
             var productoExistente = _context.Producto.Find(producto.ITEM);
+
             if (productoExistente != null)
             {
                 productoExistente.Cantidad = producto.Cantidad;
@@ -65,6 +66,9 @@ namespace Inventario360.Web.Services
                 _context.SaveChanges();
             }
         }
+
+
+
 
         public void Eliminar(int id)
         {

@@ -29,11 +29,7 @@ namespace Inventario360.Web.Controllers
 
         public ActionResult Index()
         {
-            var productos = _context.Database.SqlQuery<Producto>(
-                @"SELECT ITEM, Cantidad, NombreTecnico, Medida, UnidadMedida, Marca,
-                         Descripcion, Imagen, Proveedor, Ubicacion, Estado, Categoria
-                  FROM Producto").ToList();
-
+            var productos = _productoService.ObtenerTodos();
             return View(productos);
         }
 
@@ -57,9 +53,6 @@ namespace Inventario360.Web.Controllers
                 return View("Error");
             }
         }
-
-
-
 
         [HttpGet]
         public ActionResult Editar(int id)

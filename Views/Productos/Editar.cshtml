@@ -6,9 +6,9 @@
 }
 
 <div class="container mt-4">
-    <h2 class="mb-3 text-orange">Editar Producto</h2>
+    <h2 class="mb-3 text-center">✏️ Editar Producto</h2>
 
-    <div class="card shadow-lg p-4">
+    <div class="card shadow p-4">
         @using (Html.BeginForm("Editar", "Productos", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
@@ -70,7 +70,6 @@
                 @Html.TextBoxFor(m => m.Categoria, new { @class = "form-control", placeholder = "Ingrese la categoría" })
             </div>
 
-            <!-- Imagen actual -->
             <div class="mb-3 text-center">
                 <label class="form-label">Imagen Actual</label><br />
                 @if (!string.IsNullOrEmpty(Model.Imagen))
@@ -83,13 +82,12 @@
                 }
             </div>
 
-            <!-- Subida de nueva imagen -->
             <div class="mb-3">
                 <label class="form-label">Subir Nueva Imagen</label>
                 <input type="file" name="ImagenArchivo" class="form-control" />
             </div>
 
-            <div class="text-end">
+            <div class="text-end mt-3">
                 <button type="submit" class="btn btn-orange">💾 Guardar Cambios</button>
                 @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-secondary" })
             </div>
