@@ -8,6 +8,8 @@ using Inventario360.Web.Services;
 using System.IO;
 using System.Web;
 using System;
+using OfficeOpenXml;
+using System.ComponentModel;
 
 namespace Inventario360.Web.Controllers
 {
@@ -101,7 +103,8 @@ namespace Inventario360.Web.Controllers
 
                 ImagenArchivo.SaveAs(filePath);
 
-                if (!string.IsNullOrEmpty(productoExistente.Imagen))
+                // ✅ Solo eliminar si no es la imagen por defecto
+                if (!string.IsNullOrEmpty(productoExistente.Imagen) && productoExistente.Imagen != "no-image.png")
                 {
                     var oldImagePath = Path.Combine(uploadsPath, productoExistente.Imagen);
                     if (System.IO.File.Exists(oldImagePath))
@@ -117,9 +120,174 @@ namespace Inventario360.Web.Controllers
                 producto.Imagen = productoExistente.Imagen;
             }
 
-            _productoService.Actualizar(producto);
+
+            _productoService.Actualizar(productoExistente);
+
 
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public ActionResult Crear()
+        {
+            ViewBag.Proveedores = new SelectList(_context.Proveedor.Select(p => new { Value = p.ID.ToString(), Text = p.Nombre }), "Value", "Text");
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Crear(Producto producto, HttpPostedFileBase ImagenArchivo)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Proveedores = new SelectList(_context.Proveedor.Select(p => new { Value = p.ID.ToString(), Text = p.Nombre }), "Value", "Text");
+                return View(producto);
+            }
+
+            if (ImagenArchivo != null && ImagenArchivo.ContentLength > 0)
+            {
+                var rutaCarpeta = Server.MapPath("~/images");
+                var nombreArchivo = producto.ITEM + "_" + Path.GetFileName(ImagenArchivo.FileName);
+                var rutaArchivo = Path.Combine(rutaCarpeta, nombreArchivo);
+                ImagenArchivo.SaveAs(rutaArchivo);
+                producto.Imagen = nombreArchivo;
+            }
+
+            _productoService.Agregar(producto);
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public JsonResult Eliminar(int id)
+        {
+            try
+            {
+                var producto = _context.Producto.Find(id);
+                if (producto == null)
+                {
+                    return Json(new { success = false, message = "No se encontró el producto." });
+                }
+
+               
+
+                _context.Producto.Remove(producto);
+                _context.SaveChanges();
+
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error interno: " + ex.Message });
+            }
+        }
+
+        [HttpGet]
+        public JsonResult ObtenerProductos()
+        {
+            try
+            {
+                var productos = _productoService.ObtenerTodos();
+                if (productos == null || !productos.Any())
+                {
+                    Response.StatusCode = 404;
+                    return Json(new { error = "No se encontraron productos." }, JsonRequestBehavior.AllowGet);
+                }
+
+                return Json(productos, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = 500;
+                return Json(new { error = "Error al obtener productos", detalle = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult Subir()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ProcesarExcel(HttpPostedFileBase archivoExcel)
+        {
+            if (archivoExcel == null || archivoExcel.ContentLength == 0)
+            {
+                TempData["Error"] = "Por favor, selecciona un archivo válido.";
+                return RedirectToAction("Subir");
+            }
+
+            ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
+
+            int nuevos = 0;
+            int actualizados = 0;
+
+            using (var package = new ExcelPackage(archivoExcel.InputStream))
+            {
+                var worksheet = package.Workbook.Worksheets.FirstOrDefault();
+                if (worksheet == null)
+                {
+                    TempData["Error"] = "El archivo no contiene hojas.";
+                    return RedirectToAction("Subir");
+                }
+
+                int rowCount = worksheet.Dimension.Rows;
+
+                for (int row = 2; row <= rowCount; row++)
+                {
+                    string nombreTecnico = worksheet.Cells[row, 2].Text.Trim();
+                    string medida = worksheet.Cells[row, 3].Text.Trim();
+
+                    var productoExistente = _context.Producto
+                        .FirstOrDefault(p => p.NombreTecnico == nombreTecnico && p.Medida == medida);
+
+                    if (productoExistente != null)
+                    {
+                        int cantidadExcel = int.Parse(worksheet.Cells[row, 1].Text);
+                        productoExistente.Cantidad = (productoExistente.Cantidad ?? 0) + cantidadExcel;
+                        productoExistente.UnidadMedida = worksheet.Cells[row, 4].Text;
+                        productoExistente.Marca = worksheet.Cells[row, 5].Text;
+                        productoExistente.Descripcion = worksheet.Cells[row, 6].Text;
+                        productoExistente.Imagen = string.IsNullOrWhiteSpace(worksheet.Cells[row, 7].Text) ? "no-image.png" : worksheet.Cells[row, 7].Text;
+                        productoExistente.Proveedor = int.TryParse(worksheet.Cells[row, 8].Text, out int provId) ? provId : (int?)null;
+                        productoExistente.Ubicacion = worksheet.Cells[row, 9].Text;
+                        productoExistente.Estado = worksheet.Cells[row, 10].Text;
+                        productoExistente.Categoria = worksheet.Cells[row, 11].Text;
+
+                        actualizados++;
+                    }
+                    else
+                    {
+                        var nuevoProducto = new Producto
+                        {
+                            Cantidad = int.Parse(worksheet.Cells[row, 1].Text),
+                            NombreTecnico = nombreTecnico,
+                            Medida = medida,
+                            UnidadMedida = worksheet.Cells[row, 4].Text,
+                            Marca = worksheet.Cells[row, 5].Text,
+                            Descripcion = worksheet.Cells[row, 6].Text,
+                            Imagen = string.IsNullOrWhiteSpace(worksheet.Cells[row, 7].Text) ? "no-image.png" : worksheet.Cells[row, 7].Text,
+                            Proveedor = int.TryParse(worksheet.Cells[row, 8].Text, out int provIdNuevo) ? provIdNuevo : (int?)null,
+                            Ubicacion = worksheet.Cells[row, 9].Text,
+                            Estado = worksheet.Cells[row, 10].Text,
+                            Categoria = worksheet.Cells[row, 11].Text
+                        };
+
+                        _context.Producto.Add(nuevoProducto);
+                        nuevos++;
+                    }
+                }
+
+                _context.SaveChanges();
+                TempData["Mensaje"] = "Inventario actualizado correctamente.";
+                TempData["Nuevos"] = nuevos;
+                TempData["Actualizados"] = actualizados;
+            }
+
+            return RedirectToAction("Index");
+        }
+
+
     }
 }

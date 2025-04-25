@@ -74,7 +74,8 @@
                 <label class="form-label">Imagen Actual</label><br />
                 @if (!string.IsNullOrEmpty(Model.Imagen))
                 {
-                    <img src="@Url.Content("~/images/" + Model.Imagen)" class="img-fluid rounded shadow-sm" width="150" />
+                    <img src="@Url.Content("~/images/" + Model.Imagen)" width="100" />
+
                 }
                 else
                 {
