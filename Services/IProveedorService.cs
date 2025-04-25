@@ -10,5 +10,8 @@ namespace Inventario360.Web.Services
         void Agregar(Proveedor proveedor);      // Agregar nuevo proveedor
         void Actualizar(Proveedor proveedor);   // Actualizar proveedor existente
         void Eliminar(int id);                  // Eliminar proveedor por ID
+
+        string ObtenerNombreProveedor(int? proveedorId);
+
     }
 }

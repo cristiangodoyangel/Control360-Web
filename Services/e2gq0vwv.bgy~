@@ -25,15 +25,10 @@ namespace Inventario360.Web.Services
 
         public Producto ObtenerPorId(int id)
         {
-            return _context.Database.SqlQuery<Producto>(
-                @"SELECT ITEM, Cantidad, NombreTecnico, Medida, UnidadMedida, Marca,
-                 Descripcion, Imagen, Proveedor, Ubicacion, Estado, Categoria
-          FROM Producto
-          WHERE ITEM = @p0", id).FirstOrDefault();
+            return _context.Producto
+                .Where(p => p.ITEM == id)
+                .FirstOrDefault();
         }
-
-
-
 
 
 

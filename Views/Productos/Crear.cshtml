@@ -1,0 +1,146 @@
+﻿@model Inventario360.Web.Models.Producto
+
+@{
+    ViewBag.Title = "Agregar Nuevo Producto";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-3 text-orange">Agregar Nuevo Producto</h2>
+
+    <div class="card shadow-lg p-4">
+        @using (Html.BeginForm("Crear", "Productos", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="mb-3">
+                <label class="form-label">Nombre Técnico</label>
+                @Html.TextBoxFor(m => m.NombreTecnico, new { @class = "form-control", required = "required" })
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Medida</label>
+                    @Html.TextBoxFor(m => m.Medida, new { @class = "form-control" })
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Unidad de Medida</label>
+                    @Html.TextBoxFor(m => m.UnidadMedida, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Marca</label>
+                    @Html.TextBoxFor(m => m.Marca, new { @class = "form-control" })
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Cantidad</label>
+                    @Html.TextBoxFor(m => m.Cantidad, new { @class = "form-control", type = "number" })
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Descripción</label>
+                @Html.TextAreaFor(m => m.Descripcion, new { @class = "form-control", rows = 3 })
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Ubicación</label>
+                    @Html.TextBoxFor(m => m.Ubicacion, new { @class = "form-control" })
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Estado</label>
+                    @Html.DropDownListFor(m => m.Estado, new SelectList(new[] {
+                        new { Value = "Nuevo", Text = "Nuevo" },
+                        new { Value = "Usado", Text = "Usado" }
+                    }, "Value", "Text"), "-- Seleccione --", new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Proveedor</label>
+                @Html.DropDownListFor(m => m.Proveedor, ViewBag.Proveedores as SelectList, "Seleccione un proveedor", new { @class = "form-control" })
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Categoría</label>
+                @Html.TextBoxFor(m => m.Categoria, new { @class = "form-control", placeholder = "Ingrese la categoría" })
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Subir Imagen</label>
+                <input type="file" name="ImagenArchivo" class="form-control" />
+            </div>
+
+            <div class="text-end">
+                <button type="submit" class="btn btn-orange">💾 Guardar Producto</button>
+                @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-secondary" })
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    /* Se mantiene igual que tu versión original */
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .pagination-separated .paginate_button {
+        margin: 0 8px;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #fcd8b7;
+    }
+
+    .fila-hover:hover {
+        background-color: #fbdfc5;
+    }
+
+    .mb-4 {
+        margin-bottom: 3rem !important;
+    }
+
+    .table-light th {
+        background-color: #f8f9fa;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+    .dataTables_wrapper .dataTables_filter {
+        margin-bottom: 15px;
+    }
+
+    .table-bordered {
+        border: 1px solid #333 !important;
+    }
+
+        .table-bordered th,
+        .table-bordered td {
+            border: 0.5px solid #ccc !important;
+        }
+
+    table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control::before {
+        background-color: #f06529 !important;
+        color: white !important;
+        border-radius: 50% !important;
+        width: 18px !important;
+        height: 18px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-weight: bold !important;
+    }
+
+    table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td.dtr-control::before {
+        background-color: #d9531e !important;
+        color: black !important;
+    }
+</style>

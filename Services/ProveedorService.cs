@@ -50,5 +50,14 @@ namespace Inventario360.Web.Services.Implementaciones
                 _context.SaveChanges();
             }
         }
+
+        public string ObtenerNombreProveedor(int? proveedorId)
+        {
+            if (proveedorId == null) return "Proveedor no definido";
+
+            var proveedor = _context.Proveedor.Find(proveedorId);
+            return proveedor != null ? proveedor.Nombre : "Proveedor no definido";
+        }
+
     }
 }

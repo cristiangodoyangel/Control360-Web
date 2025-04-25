@@ -5,7 +5,7 @@ namespace Inventario360.Web.Data
 {
     public class InventarioDbContext : DbContext
     {
-        // 🔒 Desactiva la inicialización automática de EF (evita el error del modelo)
+        
         static InventarioDbContext()
         {
             Database.SetInitializer<InventarioDbContext>(null);

@@ -1,0 +1,61 @@
+﻿using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web.Mvc;
+using Inventario360.Web.Models;
+using Inventario360.Web.Data;
+using Inventario360.Web.Services;
+using System.Net;
+
+namespace Inventario360.Web.Controllers
+{
+    public class ProductosController : Controller
+    {
+
+        private readonly IProductoService _productoService;
+        private readonly InventarioDbContext _context;
+        
+
+        public ProductosController()
+        {
+            _context = new InventarioDbContext();
+        }
+
+        public ProductosController(IProductoService productoService, InventarioDbContext context)
+        {
+            _productoService = productoService;
+            _context = context;
+        }
+
+
+        public ActionResult Index()
+        {
+            var productos = _context.Database.SqlQuery<Producto>(
+                @"SELECT ITEM, Cantidad, NombreTecnico, Medida, UnidadMedida, Marca,
+                         Descripcion, Imagen, Proveedor, Ubicacion, Estado, Categoria
+                  FROM Producto").ToList();
+
+            return View(productos);
+        }
+
+        public ActionResult Detalle(int? id)
+        {
+            if (id == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest); // o return RedirectToAction("Index");
+
+            var producto = _context.Producto.Find(id);
+            if (producto == null)
+                return HttpNotFound();
+
+            var proveedor = _context.Proveedor.Find(producto.Proveedor);
+            ViewBag.NombreProveedor = proveedor != null ? proveedor.Nombre : "Proveedor no definido";
+
+            return View(producto);
+        }
+
+
+
+
+
+    }
+}

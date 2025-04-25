@@ -1,0 +1,35 @@
+﻿@model Inventario360.Web.Models.Producto
+
+@{
+    ViewBag.Title = "Eliminar Producto";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-3 text-danger">❌ Eliminar Producto</h2>
+
+    <div class="card shadow-lg p-4 border-danger">
+        <div class="alert alert-warning">
+            <p>⚠️ <strong>Advertencia:</strong> Esta acción no se puede deshacer.</p>
+        </div>
+
+        <p>¿Estás seguro de que deseas eliminar el producto <strong class="text-primary">@Model.NombreTecnico</strong>?</p>
+
+        <!-- Mostrar la categoría del producto -->
+        <p><strong>Categoría:</strong> <span class="text-dark">@Model.Categoria</span></p>
+
+        <div class="text-center mb-3">
+            <img src="@Url.Content("~/images/" + Model.Imagen)" class="img-fluid rounded shadow-sm" width="150" />
+        </div>
+
+        @using (Html.BeginForm("Eliminar", "Productos", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.ITEM)
+
+            <div class="text-end">
+                <button type="submit" class="btn btn-danger">🗑️ Sí, eliminar</button>
+                @Html.ActionLink("❌ Cancelar", "Index", null, new { @class = "btn btn-secondary" })
+            </div>
+        }
+    </div>
+</div>

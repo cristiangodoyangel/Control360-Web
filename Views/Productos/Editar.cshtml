@@ -1,0 +1,98 @@
+﻿@model Inventario360.Web.Models.Producto
+
+@{
+    ViewBag.Title = "Editar Producto";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-3 text-orange">Editar Producto</h2>
+
+    <div class="card shadow-lg p-4">
+        @using (Html.BeginForm("Editar", "Productos", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.ITEM)
+
+            <div class="mb-3">
+                <label class="form-label">Nombre Técnico</label>
+                @Html.TextBoxFor(m => m.NombreTecnico, new { @class = "form-control", required = "required" })
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Medida</label>
+                    @Html.TextBoxFor(m => m.Medida, new { @class = "form-control" })
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Unidad de Medida</label>
+                    @Html.TextBoxFor(m => m.UnidadMedida, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Marca</label>
+                    @Html.TextBoxFor(m => m.Marca, new { @class = "form-control" })
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Cantidad</label>
+                    @Html.TextBoxFor(m => m.Cantidad, new { @class = "form-control", type = "number" })
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Descripción</label>
+                @Html.TextAreaFor(m => m.Descripcion, new { @class = "form-control", rows = "3" })
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Ubicación</label>
+                    @Html.TextBoxFor(m => m.Ubicacion, new { @class = "form-control" })
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Estado</label>
+                    @Html.DropDownListFor(m => m.Estado, new SelectList(new[] {
+                        new { Value = "Nuevo", Text = "Nuevo" },
+                        new { Value = "Usado", Text = "Usado" }
+                    }, "Value", "Text", Model.Estado), "-- Seleccione --", new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Proveedor</label>
+                @Html.DropDownListFor(m => m.Proveedor, ViewBag.Proveedores as SelectList, "Seleccione un proveedor", new { @class = "form-control" })
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Categoría</label>
+                @Html.TextBoxFor(m => m.Categoria, new { @class = "form-control", placeholder = "Ingrese la categoría" })
+            </div>
+
+            <!-- Imagen actual -->
+            <div class="mb-3 text-center">
+                <label class="form-label">Imagen Actual</label><br />
+                @if (!string.IsNullOrEmpty(Model.Imagen))
+                {
+                    <img src="@Url.Content("~/images/" + Model.Imagen)" class="img-fluid rounded shadow-sm" width="150" />
+                }
+                else
+                {
+                    <p class="text-muted">No hay imagen cargada</p>
+                }
+            </div>
+
+            <!-- Subida de nueva imagen -->
+            <div class="mb-3">
+                <label class="form-label">Subir Nueva Imagen</label>
+                <input type="file" name="ImagenArchivo" class="form-control" />
+            </div>
+
+            <div class="text-end">
+                <button type="submit" class="btn btn-orange">💾 Guardar Cambios</button>
+                @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-secondary" })
+            </div>
+        }
+    </div>
+</div>

@@ -21,10 +21,10 @@
         <div class="col-md-6"></div>
         <div class="col-md-6 text-end">
           
-            {
+            
                 <a href="@Url.Action("Crear", "Productos")" class="btn btn-secondary"> Agregar Producto</a>
                 <a href="@Url.Action("Subir", "Productos")" class="btn btn-secondary"> Subir Excel</a>
-            }
+            
         </div>
     </div>
 
@@ -43,9 +43,9 @@
                     <th class="p-3">Categoría</th>
                     <th class="p-3">Imagen</th>
                   
-                    {
+                    
                         <th class="p-3">Acciones</th>
-                    }
+                    
                 </tr>
             </thead>
             <tbody>
@@ -69,7 +69,7 @@
                             <img src="~/images/@producto.Imagen" alt="Imagen Producto" width="50" height="50" />
                         </td>
                        
-                        {
+                        
                             <td>
                                 <a href="@Url.Action("Editar", "Productos", new { id = producto.ITEM })" class="btn btn-icon">✏️</a>
                                 <button type="button" class="btn btn-icon"
@@ -77,7 +77,7 @@
                                     🗑️
                                 </button>
                             </td>
-                        }
+                        
                     </tr>
                 }
             </tbody>
