@@ -50,7 +50,10 @@ namespace Inventario360.Web.Controllers
                     return View("Error");
                 }
 
-                ViewBag.NombreProveedor = _proveedorService.ObtenerNombreProveedor(producto.Proveedor);
+                // ✅ Obtener nombre del proveedor asociado al ID entero
+                var proveedor = _context.Proveedor.FirstOrDefault(p => p.ID == producto.Proveedor);
+                producto.NombreProveedor = proveedor != null ? proveedor.Nombre : "Sin proveedor";
+
                 return View(producto);
             }
             catch (Exception ex)
@@ -59,6 +62,7 @@ namespace Inventario360.Web.Controllers
                 return View("Error");
             }
         }
+
 
 
 
@@ -81,6 +85,9 @@ namespace Inventario360.Web.Controllers
             return View(producto);
         }
 
+
+
+
         [HttpPost]
         public ActionResult Editar(int id, Producto producto, HttpPostedFileBase ImagenArchivo)
         {
@@ -95,15 +102,17 @@ namespace Inventario360.Web.Controllers
                 return HttpNotFound();
             }
 
+            var uploadsPath = Server.MapPath("~/images");
+
+            // Subir nueva imagen
             if (ImagenArchivo != null && ImagenArchivo.ContentLength > 0)
             {
-                var uploadsPath = Server.MapPath("~/images");
                 var fileName = Guid.NewGuid().ToString() + Path.GetExtension(ImagenArchivo.FileName);
                 var filePath = Path.Combine(uploadsPath, fileName);
 
                 ImagenArchivo.SaveAs(filePath);
 
-                // ✅ Solo eliminar si no es la imagen por defecto
+                // Eliminar la imagen anterior si no es no-image.png
                 if (!string.IsNullOrEmpty(productoExistente.Imagen) && productoExistente.Imagen != "no-image.png")
                 {
                     var oldImagePath = Path.Combine(uploadsPath, productoExistente.Imagen);
@@ -113,19 +122,27 @@ namespace Inventario360.Web.Controllers
                     }
                 }
 
-                producto.Imagen = fileName;
-            }
-            else
-            {
-                producto.Imagen = productoExistente.Imagen;
+                productoExistente.Imagen = fileName;
             }
 
+            // 🛠 Actualizar los demás campos
+            productoExistente.NombreTecnico = producto.NombreTecnico;
+            productoExistente.Medida = producto.Medida;
+            productoExistente.UnidadMedida = producto.UnidadMedida;
+            productoExistente.Marca = producto.Marca;
+            productoExistente.Cantidad = producto.Cantidad;
+            productoExistente.Descripcion = producto.Descripcion;
+            productoExistente.Ubicacion = producto.Ubicacion;
+            productoExistente.Estado = producto.Estado;
+            productoExistente.Proveedor = producto.Proveedor;
+            productoExistente.Categoria = producto.Categoria;
 
+            // ✅ Ahora sí, actualizar en base de datos
             _productoService.Actualizar(productoExistente);
-
 
             return RedirectToAction("Index");
         }
+
 
         [HttpGet]
         public ActionResult Crear()

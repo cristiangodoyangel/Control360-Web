@@ -3,7 +3,6 @@ using System.Linq;
 using Inventario360.Web.Models;
 using Inventario360.Web.Data;
 
-
 namespace Inventario360.Web.Services
 {
     public class ProductoService : IProductoService
@@ -17,10 +16,7 @@ namespace Inventario360.Web.Services
 
         public List<Producto> ObtenerTodos()
         {
-            return _context.Database.SqlQuery<Producto>(
-                @"SELECT ITEM, Cantidad, NombreTecnico, Medida, UnidadMedida, Marca,
-                 Descripcion, Imagen, Proveedor, Ubicacion, Estado, Categoria
-          FROM Producto").ToList();
+            return _context.Producto.ToList();
         }
 
         public Producto ObtenerPorId(int id)
@@ -36,8 +32,6 @@ namespace Inventario360.Web.Services
 
 
 
-
-
         public void Agregar(Producto producto)
         {
             _context.Producto.Add(producto);
@@ -46,8 +40,7 @@ namespace Inventario360.Web.Services
 
         public void Actualizar(Producto producto)
         {
-            var productoExistente = _context.Producto.Find(producto.ITEM);
-
+            var productoExistente = _context.Producto.FirstOrDefault(p => p.ITEM == producto.ITEM);
             if (productoExistente != null)
             {
                 productoExistente.Cantidad = producto.Cantidad;
@@ -62,10 +55,10 @@ namespace Inventario360.Web.Services
                 productoExistente.Estado = producto.Estado;
                 productoExistente.Categoria = producto.Categoria;
 
-                _context.Entry(productoExistente).State = System.Data.Entity.EntityState.Modified;
                 _context.SaveChanges();
             }
         }
+
 
 
 

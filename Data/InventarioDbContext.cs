@@ -5,7 +5,7 @@ namespace Inventario360.Web.Data
 {
     public class InventarioDbContext : DbContext
     {
-        
+
         static InventarioDbContext()
         {
             Database.SetInitializer<InventarioDbContext>(null);

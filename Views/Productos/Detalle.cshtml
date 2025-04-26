@@ -1,120 +1,61 @@
 ﻿@model Inventario360.Web.Models.Producto
 
-
 @{
-    ViewBag.Title = "Detalle del Producto";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Detalles del Producto";
 }
 
-<div class="container mt-4">
-    <h2 class="mb-3 text-primary">Detalle del Producto</h2>
+<h2 class="mt-4">Detalles del Producto</h2>
 
-    <div class="card shadow-lg">
-        <div class="card-body">
-            <div class="row">
-                <!-- Imagen del producto -->
-                <div class="col-md-4 text-center">
-                    <img src="@Url.Content("~/images/" + producto.Imagen)" alt="Imagen Producto" width="50" height="50" />
-                </div>
-                <!-- Datos del producto -->
-                <div class="col-md-8">
-                    <h3 class="card-title text-dark">@Model.NombreTecnico</h3>
-                    <table class="table table-bordered mt-3">
-                        <tbody>
-                            <tr>
-                                <th class="bg-light">Marca</th>
-                                <td>@Model.Marca</td>
-                            </tr>
-                            <tr>
-                                <th class="bg-light">Descripción</th>
-                                <td>@Model.Descripcion</td>
-                            </tr>
-                            <tr>
-                                <th class="bg-light">Stock</th>
-                                <td class="fw-bold">@Model.Cantidad @Model.UnidadMedida</td>
-                            </tr>
-                            <tr>
-                                <th class="bg-light">Ubicación</th>
-                                <td>@Model.Ubicacion</td>
-                            </tr>
-                            <tr>
-                                <th class="bg-light">Proveedor</th>
-                                <td>@ViewBag.NombreProveedor</td>
-                            </tr>
-                            <tr>
-                                <th class="bg-light">Categoría</th>
-                                <td>@Model.Categoria</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+<div class="card shadow-lg p-4 mt-3">
+    <div class="row">
+        <div class="col-md-6">
+            <dl class="row">
+                <dt class="col-sm-4">Nombre Técnico</dt>
+                <dd class="col-sm-8">@Model.NombreTecnico</dd>
+
+                <dt class="col-sm-4">Descripción</dt>
+                <dd class="col-sm-8">@Model.Descripcion</dd>
+
+                <dt class="col-sm-4">Categoría</dt>
+                <dd class="col-sm-8">@(!string.IsNullOrEmpty(Model.Categoria) ? Model.Categoria : "Sin categoría")</dd>
+
+                <dt class="col-sm-4">Proveedor</dt>
+                <dd class="col-sm-8">@Model.NombreProveedor</dd>
+
+                <dt class="col-sm-4">Marca</dt>
+                <dd class="col-sm-8">@(!string.IsNullOrEmpty(Model.Marca) ? Model.Marca : "Sin marca")</dd>
+
+                <dt class="col-sm-4">Medida</dt>
+                <dd class="col-sm-8">@(!string.IsNullOrEmpty(Model.Medida) ? Model.Medida : "Sin medida")</dd>
+
+                <dt class="col-sm-4">Unidad de Medida</dt>
+                <dd class="col-sm-8">@(!string.IsNullOrEmpty(Model.UnidadMedida) ? Model.UnidadMedida : "Sin unidad")</dd>
+
+                <dt class="col-sm-4">Ubicación</dt>
+                <dd class="col-sm-8">@(!string.IsNullOrEmpty(Model.Ubicacion) ? Model.Ubicacion : "Sin ubicación")</dd>
+
+                <dt class="col-sm-4">Estado</dt>
+                <dd class="col-sm-8">@(!string.IsNullOrEmpty(Model.Estado) ? Model.Estado : "Sin estado")</dd>
+
+                <dt class="col-sm-4">Cantidad</dt>
+                <dd class="col-sm-8">@Model.Cantidad</dd>
+            </dl>
+        </div>
+
+        <div class="col-md-6 text-center">
+            @if (!string.IsNullOrEmpty(Model.Imagen))
+            {
+                <img src="@Url.Content("~/images/" + Model.Imagen)" class="img-fluid rounded" alt="Imagen del Producto" style="max-height: 300px;" />
+            }
+            else
+            {
+                <p><em>Sin imagen disponible</em></p>
+            }
         </div>
     </div>
 
-    <!-- Botón de regreso -->
-    <div class="mt-4 text-end">
-        @Html.ActionLink("Volver al inventario", "Index", "Productos", null, new { @class = "btn btn-secondary btn-lg" })
+    <div class="mt-4">
+        @Html.ActionLink("Editar", "Edit", new { id = Model.ITEM }, new { @class = "btn btn-orange" })
+        @Html.ActionLink("Volver a la lista", "Index", null, new { @class = "btn btn-secondary" })
     </div>
 </div>
-
-<style>
-    .table-responsive {
-        overflow-x: auto;
-    }
-
-    .pagination-separated .paginate_button {
-        margin: 0 8px;
-    }
-
-    .table-hover tbody tr:hover {
-        background-color: #fcd8b7;
-    }
-
-    .fila-hover:hover {
-        background-color: #fbdfc5;
-    }
-
-    .mb-4 {
-        margin-bottom: 3rem !important;
-    }
-
-    .table-light th {
-        background-color: #f8f9fa;
-        font-weight: bold;
-        text-align: center;
-    }
-
-    .table td {
-        vertical-align: middle;
-    }
-
-    .dataTables_wrapper .dataTables_filter {
-        margin-bottom: 15px;
-    }
-
-    .table-bordered {
-        border: 1px solid #333 !important;
-    }
-
-        .table-bordered th, .table-bordered td {
-            border: 0.5px solid #ccc !important;
-        }
-
-    table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control::before {
-        background-color: #f06529 !important;
-        color: white !important;
-        border-radius: 50% !important;
-        width: 18px !important;
-        height: 18px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        font-weight: bold !important;
-    }
-
-    table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td.dtr-control::before {
-        background-color: #d9531e !important;
-        color: black !important;
-    }
-</style>

@@ -31,6 +31,10 @@ namespace Inventario360.Web.Models
 
         public int? Proveedor { get; set; }
 
+        [NotMapped]
+        public string NombreProveedor { get; set; }
+
+
         [StringLength(255)]
         public string Ubicacion { get; set; }
 
