@@ -134,6 +134,15 @@
 </div>
 
 
+<!-- Botón "Crear Solicitud de Material" ubicado abajo a la derecha -->
+<div style="text-align: right; margin-top: 20px;">
+    <button type="button" class="btn btn-orange" id="btnDescargarPDF">
+        Descargar Solicitudes en PDF
+    </button>
+</div>
+
+
+
 @section Scripts {
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -175,16 +184,16 @@
                     }
 
                     let newRow = `<tr>
-                    <td>${nombre}</td>
-                    <td><input type="number" class="form-control cantidad-input" value="${cantidad}" min="1" style="width: 80px;"></td>
-                    <td>${medida}</td>
-                    <td>${unidadMedida}</td>
-                    <td>${marca}</td>
-                    <td>${descripcion}</td>
-                    <td><img src="${imagenSrc}" alt="Imagen Producto" class="producto-img" style="max-width: 50px;"></td>
-                    <td>${proveedorNombre}</td>
-                    <td><button class="btn btn-secondary btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
-                </tr>`;
+                            <td>${nombre}</td>
+                            <td><input type="number" class="form-control cantidad-input" value="${cantidad}" min="1" style="width: 80px;"></td>
+                            <td>${medida}</td>
+                            <td>${unidadMedida}</td>
+                            <td>${marca}</td>
+                            <td>${descripcion}</td>
+                            <td><img src="${imagenSrc}" alt="Imagen Producto" class="producto-img" style="max-width: 50px;"></td>
+                            <td>${proveedorNombre}</td>
+                            <td><button class="btn btn-secondary btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
+                        </tr>`;
                     tbody.insertAdjacentHTML("beforeend", newRow);
 
                     let modal = bootstrap.Modal.getInstance(document.getElementById("modalNuevoProducto"));
@@ -262,19 +271,19 @@
                     let tbody = document.querySelector("#tablaInventario tbody");
                     tbody.innerHTML = "";
                     data.forEach(producto => {
-                        let imagenSrc = producto.imagen?.trim() ? `/images/${producto.imagen}` : "/images/no-image.png";
+                        let imagenSrc = producto.Imagen?.trim() ? `/images/${producto.Imagen}` : "/images/no-image.png";
                         let row = `<tr>
-                        <td><button class="btn btn-sm btn-orange" onclick="seleccionarProducto('${producto.item}', '${producto.nombreTecnico}', '${producto.cantidad}', '${producto.medida}', '${producto.unidadMedida}', '${producto.marca}', '${producto.ubicacion}', '${producto.estado}', '${producto.imagen}', '${producto.descripcion}')">Seleccionar</button></td>
-                        <td>${producto.nombreTecnico || '-'}</td>
-                        <td>${producto.cantidad || '-'}</td>
-                        <td>${producto.medida || '-'}</td>
-                        <td>${producto.unidadMedida || '-'}</td>
-                        <td>${producto.marca || '-'}</td>
-                        <td class="d-none">${producto.descripcion || '-'}</td>
-                        <td>${producto.ubicacion || '-'}</td>
-                        <td>${producto.estado || '-'}</td>
-                        <td><img src="${imagenSrc}" class="producto-img" alt="Imagen"></td>
-                    </tr>`;
+                            <td><button class="btn btn-sm btn-orange" onclick="seleccionarProducto('${producto.ITEM}', '${producto.NombreTecnico}', '${producto.Cantidad}', '${producto.Medida}', '${producto.UnidadMedida}', '${producto.Marca}', '${producto.Ubicacion}', '${producto.Estado}', '${producto.Imagen}', '${producto.Descripcion}')">Seleccionar</button></td>
+                            <td>${producto.NombreTecnico || '-'}</td>
+                            <td>${producto.Cantidad || '-'}</td>
+                            <td>${producto.Medida || '-'}</td>
+                            <td>${producto.UnidadMedida || '-'}</td>
+                            <td>${producto.Marca || '-'}</td>
+                            <td class="d-none">${producto.Descripcion || '-'}</td>
+                            <td>${producto.Ubicacion || '-'}</td>
+                            <td>${producto.Estado || '-'}</td>
+                            <td><img src="${imagenSrc}" class="producto-img" alt="Imagen"></td>
+                        </tr>`;
                         tbody.innerHTML += row;
                     });
 
@@ -293,22 +302,23 @@
                 .catch(error => console.error("Error al cargar productos:", error));
         }
 
+
         function seleccionarProducto(item, nombre, cantidad, medida, unidadMedida, marca, ubicacion, estado, imagen, descripcion, proveedor) {
             let tbody = document.querySelector("#tablaSolicitudes tbody");
             let proveedorNombre = proveedor?.trim() ? proveedor : "Sodimac";
             let imagenSrc = imagen?.trim() ? `/images/${imagen}` : "/images/no-image.png";
 
             let newRow = `<tr>
-            <td>${nombre}</td>
-            <td><input type="number" class="form-control cantidad-input" value="1" min="1" style="width: 80px;"></td>
-            <td>${medida}</td>
-            <td>${unidadMedida}</td>
-            <td>${marca}</td>
-            <td>${descripcion}</td>
-            <td><img src="${imagenSrc}" alt="Imagen Producto" class="producto-img" style="max-width: 50px;"></td>
-            <td>${proveedorNombre}</td>
-            <td><button class="btn btn-secondary btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
-        </tr>`;
+                    <td>${nombre}</td>
+                    <td><input type="number" class="form-control cantidad-input" value="1" min="1" style="width: 80px;"></td>
+                    <td>${medida}</td>
+                    <td>${unidadMedida}</td>
+                    <td>${marca}</td>
+                    <td>${descripcion}</td>
+                    <td><img src="${imagenSrc}" alt="Imagen Producto" class="producto-img" style="max-width: 50px;"></td>
+                    <td>${proveedorNombre}</td>
+                    <td><button class="btn btn-secondary btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
+                </tr>`;
             tbody.insertAdjacentHTML("beforeend", newRow);
 
             let modal = bootstrap.Modal.getInstance(document.getElementById("modalInventario"));
