@@ -26,6 +26,7 @@ namespace Inventario360.Web
             container.RegisterType<ISalidaBodegaService, SalidaBodegaService>();
             container.RegisterType<IEmpleadoService, EmpleadoService>();
             container.RegisterType<IProyectoService, ProyectoService>();
+            container.RegisterType<ISolicitudService, SolicitudService>();
 
 
 

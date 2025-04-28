@@ -1,0 +1,127 @@
+﻿@model Inventario360.Web.Models.SolicitudDeMaterial
+
+@{
+    ViewBag.Title = "Nueva Solicitud de Material";
+}
+
+<h2 class="mb-4 text-center">Crear Solicitud de Material</h2>
+
+<div class="mb-3">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalInventario">
+        Agregar desde Inventario
+    </button>
+
+    <button type="button" class="btn btn-success" id="btnNuevoProducto">
+        Agregar Producto No Listado
+    </button>
+</div>
+
+<!-- Formulario para nuevo producto -->
+@using (Html.BeginForm("CrearNuevoProducto", "Solicitudes", FormMethod.Post, new { id = "formNuevoProducto", style = "display:none;" }))
+{
+    <div class="mb-3">
+        @Html.LabelFor(m => m.NombreTecnico, "Nombre del Material", new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.NombreTecnico, new { @class = "form-control", required = "required" })
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Cantidad, "Cantidad", new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.Cantidad, new { @class = "form-control", type = "number", required = "required" })
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Medida, "Medida", new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.Medida, new { @class = "form-control", required = "required" })
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(m => m.UnidadMedida, "Unidad de Medida", new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.UnidadMedida, new { @class = "form-control", required = "required" })
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Marca, "Marca", new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.Marca, new { @class = "form-control" })
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Descripcion, "Descripción", new { @class = "form-label" })
+        @Html.TextAreaFor(m => m.Descripcion, new { @class = "form-control" })
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(m => m.PosibleProveedor, "Posible Proveedor", new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.PosibleProveedor, new { @class = "form-control" })
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Solicitante, "Solicitante", new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.Solicitante, new { @class = "form-control", required = "required" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a href="@Url.Action("Index", "Solicitudes")" class="btn btn-secondary">Cancelar</a>
+}
+
+<!-- Modal de Inventario -->
+<div class="modal fade" id="modalInventario" tabindex="-1" aria-labelledby="modalInventarioLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalInventarioLabel">Seleccionar Producto del Inventario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered" id="tablaInventario">
+                    <thead>
+                        <tr>
+                            <th>Seleccionar</th>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Se llenará dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        fetch('@Url.Action("ObtenerProductos", "Solicitudes")')
+            .then(response => response.json())
+            .then(data => {
+                let tbody = document.querySelector("#tablaInventario tbody");
+                tbody.innerHTML = "";
+                data.forEach(producto => {
+                    let row = `<tr>
+                        <td><button class="btn btn-sm btn-success" onclick="seleccionarProducto('${producto.item}', '${producto.nombreTecnico}', '${producto.descripcion}')">Seleccionar</button></td>
+                        <td>${producto.nombreTecnico}</td>
+                        <td>${producto.descripcion}</td>
+                    </tr>`;
+                    tbody.innerHTML += row;
+                });
+            });
+    });
+
+    document.getElementById("btnNuevoProducto").addEventListener("click", function () {
+        document.getElementById("formNuevoProducto").style.display = "block";
+        this.style.display = "none";
+    });
+
+    function seleccionarProducto(item, nombre, descripcion) {
+        document.getElementById("formNuevoProducto").style.display = "block";
+        document.getElementById("btnNuevoProducto").style.display = "none";
+
+        document.getElementById("NombreTecnico").value = nombre || "";
+        document.getElementById("Descripcion").value = descripcion || "";
+
+        var modal = bootstrap.Modal.getInstance(document.getElementById('modalInventario'));
+        modal.hide();
+    }
+
+    function eliminarFila(button) {
+        button.closest("tr").remove();
+    }
+    </script>
+}
