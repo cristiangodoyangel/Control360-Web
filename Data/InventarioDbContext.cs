@@ -28,6 +28,10 @@ namespace Inventario360.Web.Data
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+
+            modelBuilder.Entity<Producto>().ToTable("Producto"); // 👈 Esto fuerza a que apunte a la tabla correcta
+
+            base.OnModelCreating(modelBuilder);
             // Relaciones personalizadas si las necesitas
             /*
             modelBuilder.Entity<SalidaDeBodega>()

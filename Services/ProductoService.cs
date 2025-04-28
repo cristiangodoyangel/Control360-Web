@@ -9,10 +9,11 @@ namespace Inventario360.Web.Services
     {
         private readonly InventarioDbContext _context;
 
-        public ProductoService()
+        public ProductoService(InventarioDbContext context)
         {
-            _context = new InventarioDbContext();
+            _context = context;
         }
+
 
         public List<Producto> ObtenerTodos()
         {

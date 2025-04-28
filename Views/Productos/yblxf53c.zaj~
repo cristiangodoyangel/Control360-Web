@@ -19,8 +19,8 @@
     <div class="row mb-3">
         <div class="col-md-6"></div>
         <div class="col-md-6 text-end">
-            <a href="@Url.Action("Crear", "Productos")" class="btn btn-secondary">Agregar Producto</a>
-            <a href="@Url.Action("Subir", "Productos")" class="btn btn-secondary">⬆Subir Excel</a>
+            <a href="@Url.Action("Crear", "Productos")" class="btn btn-success">➕ Agregar Producto</a>
+            <a href="@Url.Action("Subir", "Productos")" class="btn btn-warning">⬆️ Subir Excel</a>
         </div>
     </div>
 
@@ -62,8 +62,8 @@
                             <img src="@Url.Content("~/images/" + (string.IsNullOrEmpty(producto.Imagen) ? "no-image.png" : producto.Imagen))" alt="Imagen Producto" width="80" height="80" class="img-thumbnail" />
                         </td>
                         <td class="text-center">
-                            <a href="@Url.Action("Editar", "Productos", new { id = producto.ITEM })" class="btn btn-icon">✏️</a>
-                            <button type="button" class="btn btn-icon" onclick="confirmarEliminacion(@producto.ITEM, '@producto.NombreTecnico', '@producto.Categoria')">🗑️</button>
+                            <a href="@Url.Action("Editar", "Productos", new { id = producto.ITEM })" class="btn btn-sm btn-primary">✏️</a>
+                            <button type="button" class="btn btn-sm btn-secondary" onclick="confirmarEliminacion(@producto.ITEM, '@producto.NombreTecnico', '@producto.Categoria')">🗑️</button>
                         </td>
                     </tr>
                 }
@@ -83,11 +83,11 @@
             <div class="modal-body">
                 <p><strong>Producto:</strong> <span id="modalProductoNombre"></span></p>
                 <p><strong>Categoría:</strong> <span id="modalProductoCategoria"></span></p>
-                <p>¿Seguro que deseas eliminar este product o?</p>
+                <p>¿Seguro que deseas eliminar este producto?</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-orange" id="btnConfirmarEliminar">Eliminar</button>
+                <button type="button" class="btn btn-secondary" id="btnConfirmarEliminar">Eliminar</button>
             </div>
         </div>
     </div>

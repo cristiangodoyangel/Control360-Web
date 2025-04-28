@@ -31,10 +31,13 @@ namespace Inventario360.Web.Controllers
 
         public ActionResult Index()
         {
-            var productos = _context.Producto.ToList(); // ✅ usa DbSet normal
+            var productos = _context.Database.SqlQuery<Producto>(
+                @"SELECT ITEM, Cantidad, NombreTecnico, Medida, UnidadMedida, Marca,
+                         Descripcion, Imagen, Proveedor, Ubicacion, Estado, Categoria
+                  FROM Producto").ToList();
+
             return View(productos);
         }
-
 
         public ActionResult Detalle(int id)
         {
@@ -61,9 +64,6 @@ namespace Inventario360.Web.Controllers
         }
 
 
-
-
-
         [HttpGet]
         public ActionResult Editar(int id)
         {
@@ -75,17 +75,13 @@ namespace Inventario360.Web.Controllers
 
             ViewBag.Proveedores = new SelectList(
                 _context.Proveedor.Select(p => new { Value = p.ID.ToString(), Text = p.Nombre }),
-                "Value",
-                "Text"
+                "Value", "Text"
             );
 
             return View(producto);
         }
-
-
-
-
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Editar(int id, Producto producto, HttpPostedFileBase ImagenArchivo)
         {
             if (id != producto.ITEM)
@@ -101,7 +97,7 @@ namespace Inventario360.Web.Controllers
 
             var uploadsPath = Server.MapPath("~/images");
 
-            // Subir nueva imagen
+            // Subir nueva imagen (si se cargó una)
             if (ImagenArchivo != null && ImagenArchivo.ContentLength > 0)
             {
                 var fileName = Guid.NewGuid().ToString() + Path.GetExtension(ImagenArchivo.FileName);
@@ -109,7 +105,7 @@ namespace Inventario360.Web.Controllers
 
                 ImagenArchivo.SaveAs(filePath);
 
-                // Eliminar la imagen anterior si no es no-image.png
+                // Eliminar imagen anterior (excepto si es la predeterminada)
                 if (!string.IsNullOrEmpty(productoExistente.Imagen) && productoExistente.Imagen != "no-image.png")
                 {
                     var oldImagePath = Path.Combine(uploadsPath, productoExistente.Imagen);
@@ -122,7 +118,7 @@ namespace Inventario360.Web.Controllers
                 productoExistente.Imagen = fileName;
             }
 
-            // 🛠 Actualizar los demás campos
+            // 🛠 Actualizar los campos editables
             productoExistente.NombreTecnico = producto.NombreTecnico;
             productoExistente.Medida = producto.Medida;
             productoExistente.UnidadMedida = producto.UnidadMedida;
@@ -131,20 +127,26 @@ namespace Inventario360.Web.Controllers
             productoExistente.Descripcion = producto.Descripcion;
             productoExistente.Ubicacion = producto.Ubicacion;
             productoExistente.Estado = producto.Estado;
-            productoExistente.Proveedor = producto.Proveedor;
+            productoExistente.Proveedor = producto.Proveedor; // int
             productoExistente.Categoria = producto.Categoria;
 
-            // ✅ Ahora sí, actualizar en base de datos
+            // Guardar cambios
             _productoService.Actualizar(productoExistente);
 
+            TempData["Mensaje"] = "Producto actualizado correctamente.";
             return RedirectToAction("Index");
         }
+
 
 
         [HttpGet]
         public ActionResult Crear()
         {
-            ViewBag.Proveedores = new SelectList(_context.Proveedor.Select(p => new { Value = p.ID.ToString(), Text = p.Nombre }), "Value", "Text");
+            ViewBag.Proveedores = new SelectList(
+                _context.Proveedor.Select(p => new { Value = p.ID.ToString(), Text = p.Nombre }),
+                "Value",
+                "Text"
+            );
             return View();
         }
 
@@ -154,30 +156,41 @@ namespace Inventario360.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.Proveedores = new SelectList(_context.Proveedor.Select(p => new { Value = p.ID.ToString(), Text = p.Nombre }), "Value", "Text");
+                ViewBag.Proveedores = new SelectList(
+                    _context.Proveedor.Select(p => new { Value = p.ID.ToString(), Text = p.Nombre }),
+                    "Value",
+                    "Text"
+                );
                 return View(producto);
             }
-
-            // 👇 Agrega esta línea
-            producto.ITEM = 0;
 
             if (ImagenArchivo != null && ImagenArchivo.ContentLength > 0)
             {
                 var rutaCarpeta = Server.MapPath("~/images");
-                var nombreArchivo = Guid.NewGuid().ToString() + Path.GetExtension(ImagenArchivo.FileName); // Usa GUID en vez de ITEM
+                if (!Directory.Exists(rutaCarpeta))
+                {
+                    Directory.CreateDirectory(rutaCarpeta);
+                }
+
+                var nombreArchivo = Guid.NewGuid().ToString() + Path.GetExtension(ImagenArchivo.FileName);
                 var rutaArchivo = Path.Combine(rutaCarpeta, nombreArchivo);
                 ImagenArchivo.SaveAs(rutaArchivo);
+
                 producto.Imagen = nombreArchivo;
             }
             else
             {
-                producto.Imagen = "no-image.png"; // Para evitar campos nulos
+                producto.Imagen = "no-image.png";
             }
 
-            _productoService.Agregar(producto);
+            _context.Producto.Add(producto);
+            _context.SaveChanges();
 
+            TempData["Mensaje"] = "Producto creado correctamente.";
             return RedirectToAction("Index");
         }
+
+
 
         [HttpPost]
         public JsonResult Eliminar(int id)
@@ -313,4 +326,3 @@ namespace Inventario360.Web.Controllers
 
     }
 }
-
