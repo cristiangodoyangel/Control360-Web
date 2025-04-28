@@ -20,7 +20,7 @@
         <div class="col-md-6"></div>
         <div class="col-md-6 text-end">
             <a href="@Url.Action("Crear", "Productos")" class="btn btn-secondary">Agregar Producto</a>
-            <a href="@Url.Action("Subir", "Productos")" class="btn btn-secondary">⬆Subir Excel</a>
+            <a href="@Url.Action("Subir", "Productos")" class="btn btn-secondary">Subir Excel</a>
         </div>
     </div>
 
@@ -83,7 +83,7 @@
             <div class="modal-body">
                 <p><strong>Producto:</strong> <span id="modalProductoNombre"></span></p>
                 <p><strong>Categoría:</strong> <span id="modalProductoCategoria"></span></p>
-                <p>¿Seguro que deseas eliminar este product o?</p>
+                <p>¿Seguro que deseas eliminar este producto?</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -92,6 +92,35 @@
         </div>
     </div>
 </div>
+
+@if (TempData["Nuevos"] != null || TempData["Actualizados"] != null)
+{
+    <div class="modal fade" id="resultadoExcelModal" tabindex="-1" aria-labelledby="resultadoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-orange text-white">
+                    <h5 class="modal-title" id="resultadoModalLabel">📋 Carga de Inventario Completada</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>@TempData["Nuevos"]</strong> productos fueron <strong>creados</strong> nuevos en el inventario.</p>
+                    <p><strong>@TempData["Actualizados"]</strong> productos fueron <strong>actualizados</strong> correctamente.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var resultadoModal = new bootstrap.Modal(document.getElementById('resultadoExcelModal'));
+            resultadoModal.show();
+        });
+    </script>
+}
+
 
 <div class="modal fade" id="modalErrorEliminar" tabindex="-1" aria-labelledby="modalErrorEliminarLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -192,6 +221,7 @@
     .fila-hover:hover {
         background-color: #fbdfc5;
     }
+   
 
     .table-light th {
         background-color: #f8f9fa;
