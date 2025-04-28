@@ -1,0 +1,146 @@
+﻿@model Inventario360.Web.Models.SalidaDeBodega
+
+@{
+    ViewBag.Title = "Registrar Salida de Bodega";
+}
+
+<h2 class="mb-4">Registrar Salida de Bodega</h2>
+
+@using (Html.BeginForm("Crear", "SalidaDeBodega", FormMethod.Post, new { @class = "needs-validation", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group mb-3">
+        <label class="form-label" for="Fecha">Fecha de Salida</label>
+        @Html.TextBoxFor(m => m.Fecha, new { @class = "form-control", @type = "datetime-local", required = "required" })
+    </div>
+
+    <div class="form-group mb-3">
+        <label class="form-label">Responsable de Entrega</label>
+        <select name="ResponsableEntrega" class="form-select" required>
+            <option value="">Seleccione un empleado</option>
+            @foreach (var empleado in (List<Inventario360.Web.Models.Empleado>)ViewBag.Empleados)
+            {
+                <option value="@empleado.ID">@empleado.Nombre</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group mb-3">
+        <label class="form-label">Proyecto Asignado</label>
+        <select name="ProyectoAsignado" class="form-select" required>
+            <option value="">Seleccione un proyecto</option>
+            @foreach (var proyecto in (List<Inventario360.Web.Models.Proyecto>)ViewBag.Proyectos)
+            {
+                <option value="@proyecto.ID">@proyecto.Nombre</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group mb-3">
+        <label class="form-label">Solicitante</label>
+        <select name="Solicitante" class="form-select" required>
+            <option value="">Seleccione un empleado</option>
+            @foreach (var empleado in (List<Inventario360.Web.Models.Empleado>)ViewBag.Empleados)
+            {
+                <option value="@empleado.ID">@empleado.Nombre</option>
+            }
+        </select>
+    </div>
+
+    <div class="text-end">
+        <button type="submit" class="btn btn-orange">Registrar Salida</button>
+        @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-secondary" })
+    </div>
+}
+
+
+<!-- Modal de Advertencia -->
+<div class="modal fade" id="modalAdvertencia" tabindex="-1" aria-labelledby="modalAdvertenciaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header custom-orange text-dark">
+                <h5 class="modal-title" id="modalAdvertenciaLabel">Advertencia</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p id="mensajeAdvertencia"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#productoSeleccionado').select2({
+                placeholder: "Seleccione un producto",
+                allowClear: true
+            });
+        });
+
+        let productosSeleccionados = [];
+
+        document.getElementById("btnAgregarProducto").addEventListener("click", function () {
+            let select = document.getElementById("productoSeleccionado");
+            let cantidadInput = document.getElementById("cantidad");
+            let productoId = select.value;
+            let productoNombre = select.options[select.selectedIndex].text;
+            let categoria = select.options[select.selectedIndex].getAttribute("data-categoria");
+            let stockDisponible = select.options[select.selectedIndex].getAttribute("data-stock");
+            let cantidad = parseInt(cantidadInput.value);
+
+            if (!productoId || cantidad <= 0 || cantidad > parseInt(stockDisponible)) {
+                document.getElementById("mensajeAdvertencia").innerText = "Seleccione un producto válido y asegúrese que la cantidad no exceda el stock.";
+                let modal = new bootstrap.Modal(document.getElementById("modalAdvertencia"));
+                modal.show();
+                return;
+            }
+
+            productosSeleccionados.push({ ProductoID: productoId, Categoria: categoria, Cantidad: cantidad, Nombre: productoNombre });
+
+            actualizarTablaProductos();
+            select.value = "";
+            cantidadInput.value = "";
+            $('#productoSeleccionado').val(null).trigger('change');
+        });
+
+        function actualizarTablaProductos() {
+            let tbody = document.getElementById("productosSeleccionados");
+            tbody.innerHTML = "";
+            productosSeleccionados.forEach(p => {
+                let tr = document.createElement("tr");
+                tr.innerHTML = `
+                        <td>${p.Nombre}</td>
+                        <td>${p.Categoria}</td>
+                        <td>${p.Cantidad}</td>
+                        <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarProducto('${p.ProductoID}')">Eliminar</button></td>
+                    `;
+                tbody.appendChild(tr);
+            });
+            document.getElementById("productosJson").value = JSON.stringify(productosSeleccionados);
+        }
+
+        function eliminarProducto(id) {
+            productosSeleccionados = productosSeleccionados.filter(p => p.ProductoID != id);
+            actualizarTablaProductos();
+        }
+    </script>
+}
+
+<style>
+    .select2-results__option--highlighted.select2-results__option--selectable {
+        background-color: #fcd8b7 !important;
+        color: black !important;
+    }
+
+    .custom-orange {
+        background-color: #f06529 !important;
+        color: white !important;
+    }
+</style>

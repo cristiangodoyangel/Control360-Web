@@ -23,14 +23,19 @@ namespace Inventario360.Web
             // Registro de servicios e interfaces
             container.RegisterType<IProductoService, ProductoService>();
             container.RegisterType<IProveedorService, ProveedorService>();
-            container.RegisterType<InventarioDbContext, InventarioDbContext>();
+            container.RegisterType<ISalidaBodegaService, SalidaBodegaService>();
+            container.RegisterType<IEmpleadoService, EmpleadoService>();
+            container.RegisterType<IProyectoService, ProyectoService>();
 
+
+
+            container.RegisterType<InventarioDbContext, InventarioDbContext>();
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
             container.RegisterType<DbContext, InventarioDbContext>(new HierarchicalLifetimeManager());
             container.RegisterType<IUserStore<ApplicationUser>, UserStore<ApplicationUser>>(new InjectionConstructor(typeof(InventarioDbContext)));
             container.RegisterType<ApplicationUserManager>();
             container.RegisterType<ApplicationSignInManager>();
-
         }
+
     }
 }

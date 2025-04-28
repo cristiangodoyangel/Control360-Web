@@ -19,14 +19,12 @@ namespace Inventario360.Web.Data
         public DbSet<DetalleSalidaDeBodega> DetalleSalidaDeBodega { get; set; }
         public DbSet<Empleado> Empleado { get; set; }
         public DbSet<Proyecto> Proyecto { get; set; }
-
-        /*
-       
-        public DbSet<SolicitudDeMaterial> SolicitudDeMaterial { get; set; }
-        
         public DbSet<FichaEmpleado> FichaEmpleado { get; set; }
         public DbSet<Camioneta> Camionetas { get; set; }
-        public DbSet<FichaCamioneta> FichaCamionetas { get; set; }*/
+        public DbSet<FichaCamioneta> FichaCamionetas { get; set; }
+        public DbSet<SolicitudDeMaterial> SolicitudDeMaterial { get; set; }
+
+    
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
