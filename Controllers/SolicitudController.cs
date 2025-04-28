@@ -236,32 +236,42 @@ namespace Inventario360.Web.Controllers
                         table.AddCell(new PdfPCell(new Phrase(proveedorFinal, FontFactory.GetFont(FontFactory.HELVETICA, 10))) { Padding = 5f });
 
                         PdfPCell imgCell = new PdfPCell { Padding = 5f, HorizontalAlignment = Element.ALIGN_CENTER };
-
                         if (!string.IsNullOrEmpty(solicitud.Imagen))
                         {
-                            try
+                            iTextSharp.text.Image img = null;
+
+                            if (solicitud.Imagen.StartsWith("data:image"))
                             {
-                                string imagePath = Path.Combine(Server.MapPath("~/images"), solicitud.Imagen);
+                                // Imagen en Base64
+                                var base64Data = solicitud.Imagen.Substring(solicitud.Imagen.IndexOf(",") + 1);
+                                byte[] imageBytes = Convert.FromBase64String(base64Data);
+                                img = iTextSharp.text.Image.GetInstance(imageBytes);
+                            }
+                            else
+                            {
+                                // Imagen desde archivo físico
+                                var imagePath = Path.Combine(Server.MapPath("~/images"), solicitud.Imagen);
                                 if (System.IO.File.Exists(imagePath))
                                 {
-                                    var img = iTextSharp.text.Image.GetInstance(imagePath);
-                                    img.ScaleAbsolute(50f, 50f);
-                                    imgCell.AddElement(img);
-                                }
-                                else
-                                {
-                                    imgCell.AddElement(new Phrase("No disponible"));
+                                    img = iTextSharp.text.Image.GetInstance(imagePath);
                                 }
                             }
-                            catch
+
+                            if (img != null)
                             {
-                                imgCell.AddElement(new Phrase("Error al cargar imagen"));
+                                img.ScaleToFit(50f, 50f);
+                                imgCell.AddElement(img);
+                            }
+                            else
+                            {
+                                imgCell.AddElement(new Phrase("No disponible"));
                             }
                         }
                         else
                         {
-                            imgCell.AddElement(new Phrase("Sin imagen"));
+                            imgCell.AddElement(new Phrase("No disponible"));
                         }
+
 
                         table.AddCell(imgCell);
                     }

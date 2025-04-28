@@ -193,7 +193,7 @@ namespace Inventario360.Web.Controllers
             {
                 return Json(new { success = false, message = "Error al eliminar: " + ex.Message });
             }
-        }
+        } 
 
     }
 }
