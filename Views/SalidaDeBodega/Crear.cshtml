@@ -4,58 +4,81 @@
     ViewBag.Title = "Registrar Salida de Bodega";
 }
 
-<h2 class="mb-4">Registrar Salida de Bodega</h2>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
-@using (Html.BeginForm("Crear", "SalidaDeBodega", FormMethod.Post, new { @class = "needs-validation", role = "form" }))
-{
-    @Html.AntiForgeryToken()
 
-    <div class="form-group mb-3">
-        <label class="form-label" for="Fecha">Fecha de Salida</label>
-        @Html.TextBoxFor(m => m.Fecha, new { @class = "form-control", @type = "datetime-local", required = "required" })
-    </div>
+<div class="container mt-5">
+    <h2 class="mb-4">Registrar Salida de Bodega</h2>
 
-    <div class="form-group mb-3">
-        <label class="form-label">Responsable de Entrega</label>
-        <select name="ResponsableEntrega" class="form-select" required>
-            <option value="">Seleccione un empleado</option>
-            @foreach (var empleado in (List<Inventario360.Web.Models.Empleado>)ViewBag.Empleados)
-            {
-                <option value="@empleado.ID">@empleado.Nombre</option>
-            }
-        </select>
-    </div>
+    @using (Html.BeginForm("Crear", "SalidaDeBodega", FormMethod.Post, new { id = "formSalida" }))
+    {
+        @Html.AntiForgeryToken()
 
-    <div class="form-group mb-3">
-        <label class="form-label">Proyecto Asignado</label>
-        <select name="ProyectoAsignado" class="form-select" required>
-            <option value="">Seleccione un proyecto</option>
-            @foreach (var proyecto in (List<Inventario360.Web.Models.Proyecto>)ViewBag.Proyectos)
-            {
-                <option value="@proyecto.ID">@proyecto.Nombre</option>
-            }
-        </select>
-    </div>
+        <div class="row mb-3">
+            <div class="col-12">
+                <label for="productoSeleccionado" class="form-label">Seleccionar Producto</label>
+                <select id="productoSeleccionado" class="form-control">
+                    <option value="">Seleccione un producto</option>
+                    @foreach (var producto in ViewBag.Productos)
+                    {
+                        <option value="@producto.ITEM" data-stock="@producto.Cantidad" data-categoria="@producto.Categoria">
+                            @producto.NombreTecnico - (@producto.Categoria) - (Stock: @producto.Cantidad)
+                        </option>
+                    }
+                </select>
+                <div class="invalid-feedback">Debe seleccionar un producto válido.</div>
+            </div>
+        </div>
 
-    <div class="form-group mb-3">
-        <label class="form-label">Solicitante</label>
-        <select name="Solicitante" class="form-select" required>
-            <option value="">Seleccione un empleado</option>
-            @foreach (var empleado in (List<Inventario360.Web.Models.Empleado>)ViewBag.Empleados)
-            {
-                <option value="@empleado.ID">@empleado.Nombre</option>
-            }
-        </select>
-    </div>
+        <div class="mb-3">
+            <label for="cantidad" class="form-label">Cantidad</label>
+            <input type="number" id="cantidad" class="form-control" min="1" />
+            <div class="invalid-feedback">Ingrese una cantidad válida dentro del stock disponible.</div>
+        </div>
 
-    <div class="text-end">
-        <button type="submit" class="btn btn-orange">Registrar Salida</button>
+        <button type="button" class="btn btn-orange" id="btnAgregarProducto">Agregar Producto</button>
+
+        <hr class="my-4" />
+
+
+        <table class="table mt-4">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Categoría</th>
+                    <th>Cantidad</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody id="productosSeleccionados"></tbody>
+        </table>
+
+        <hr class="my-4" />
+
+
+        <div class="mb-3">
+            @Html.LabelFor(m => m.Solicitante, htmlAttributes: new { @class = "form-label" })
+            @Html.DropDownListFor(m => m.Solicitante, new SelectList(ViewBag.Empleados, "ID", "Nombre"), "Seleccione un empleado", new { @class = "form-control", required = "required" })
+        </div>
+
+        <div class="mb-3">
+            @Html.LabelFor(m => m.ResponsableEntrega, htmlAttributes: new { @class = "form-label" })
+            @Html.DropDownListFor(m => m.ResponsableEntrega, new SelectList(ViewBag.Empleados, "ID", "Nombre"), "Seleccione un empleado", new { @class = "form-control", required = "required" })
+        </div>
+
+        <div class="mb-3">
+            @Html.LabelFor(m => m.ProyectoAsignado, htmlAttributes: new { @class = "form-label" })
+            @Html.DropDownListFor(m => m.ProyectoAsignado, new SelectList(ViewBag.Proyectos, "ID", "Nombre"), "Seleccione un proyecto", new { @class = "form-control", required = "required" })
+        </div>
+
+        <input type="hidden" name="ProductosJson" id="productosJson" />
+
+        <button type="submit" class="btn btn-orange" id="btnRegistrarSalida">Registrar Salida</button>
         @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-secondary" })
-    </div>
-}
+    }
+</div>
 
-
-<!-- Modal de Advertencia -->
+<!-- Modal -->
 <div class="modal fade" id="modalAdvertencia" tabindex="-1" aria-labelledby="modalAdvertenciaLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -76,64 +99,121 @@
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
+
     <script>
+
         $(document).ready(function () {
             $('#productoSeleccionado').select2({
                 placeholder: "Seleccione un producto",
-                allowClear: true
+                allowClear: true,
+                width: '100%',
+                dropdownParent: $("#formSalida"), // Para evitar problemas si el form es modal
+                language: {
+                    searching: function () {
+                        return "Buscando...";
+                    }
+                }
+            });
+
+            // Insertar manualmente el label "Buscar Producto" sobre el buscador
+            $('#productoSeleccionado').on('select2:open', function () {
+                if (!$('.select2-search.select2-search--dropdown > label').length) {
+                    $('.select2-search.select2-search--dropdown').prepend('<label style="display:block; font-size:12px; margin-bottom:2px;">Buscar Producto</label>');
+                }
             });
         });
 
-        let productosSeleccionados = [];
 
-        document.getElementById("btnAgregarProducto").addEventListener("click", function () {
-            let select = document.getElementById("productoSeleccionado");
-            let cantidadInput = document.getElementById("cantidad");
-            let productoId = select.value;
-            let productoNombre = select.options[select.selectedIndex].text;
-            let categoria = select.options[select.selectedIndex].getAttribute("data-categoria");
-            let stockDisponible = select.options[select.selectedIndex].getAttribute("data-stock");
-            let cantidad = parseInt(cantidadInput.value);
 
-            if (!productoId || cantidad <= 0 || cantidad > parseInt(stockDisponible)) {
-                document.getElementById("mensajeAdvertencia").innerText = "Seleccione un producto válido y asegúrese que la cantidad no exceda el stock.";
-                let modal = new bootstrap.Modal(document.getElementById("modalAdvertencia"));
-                modal.show();
-                return;
-            }
 
-            productosSeleccionados.push({ ProductoID: productoId, Categoria: categoria, Cantidad: cantidad, Nombre: productoNombre });
+    let productosSeleccionados = [];
 
-            actualizarTablaProductos();
-            select.value = "";
-            cantidadInput.value = "";
-            $('#productoSeleccionado').val(null).trigger('change');
-        });
+    document.getElementById("btnAgregarProducto").addEventListener("click", function () {
+    let select = document.getElementById("productoSeleccionado");
+    let cantidadInput = document.getElementById("cantidad");
+    let productoId = select.value;
+    let productoNombre = select.options[select.selectedIndex].text;
+    let categoria = select.options[select.selectedIndex].getAttribute("data-categoria");
+    let stockDisponible = select.options[select.selectedIndex].getAttribute("data-stock");
+    let cantidad = parseInt(cantidadInput.value);
 
-        function actualizarTablaProductos() {
-            let tbody = document.getElementById("productosSeleccionados");
-            tbody.innerHTML = "";
-            productosSeleccionados.forEach(p => {
-                let tr = document.createElement("tr");
-                tr.innerHTML = `
-                        <td>${p.Nombre}</td>
-                        <td>${p.Categoria}</td>
-                        <td>${p.Cantidad}</td>
-                        <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarProducto('${p.ProductoID}')">Eliminar</button></td>
-                    `;
-                tbody.appendChild(tr);
-            });
-            document.getElementById("productosJson").value = JSON.stringify(productosSeleccionados);
-        }
+    if (!productoId || cantidad <= 0 || cantidad > parseInt(stockDisponible)) {
+    document.getElementById("mensajeAdvertencia").innerText =
+    "Seleccione un producto válido y asegúrese de que la cantidad no exceda el stock disponible.";
+    let modal = new bootstrap.Modal(document.getElementById("modalAdvertencia"));
+    modal.show();
+    return;
+    }
 
-        function eliminarProducto(id) {
-            productosSeleccionados = productosSeleccionados.filter(p => p.ProductoID != id);
-            actualizarTablaProductos();
-        }
+    productosSeleccionados.push({ ProductoID: productoId, Categoria: categoria, Cantidad: cantidad, Nombre: productoNombre });
+
+    let tbody = document.getElementById("productosSeleccionados");
+    let tr = document.createElement("tr");
+    tr.innerHTML = `
+    <td>${productoNombre}</td>
+    <td>${categoria}</td>
+    <td>${cantidad}</td>
+    <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarProducto(${productoId})">Eliminar</button></td>
+    `;
+    tbody.appendChild(tr);
+
+    document.getElementById("productosJson").value = JSON.stringify(productosSeleccionados);
+
+    select.value = "";
+    cantidadInput.value = "";
+    $('#productoSeleccionado').val(null).trigger('change');
+    });
+
+    function eliminarProducto(id) {
+    productosSeleccionados = productosSeleccionados.filter(p => p.ProductoID != id);
+    document.getElementById("productosJson").value = JSON.stringify(productosSeleccionados);
+    let tbody = document.getElementById("productosSeleccionados");
+    tbody.innerHTML = "";
+    productosSeleccionados.forEach(p => {
+    let tr = document.createElement("tr");
+    tr.innerHTML = `
+    <td>${p.Nombre}</td>
+    <td>${p.Categoria}</td>
+    <td>${p.Cantidad}</td>
+    <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarProducto(${p.ProductoID})">Eliminar</button></td>
+    `;
+    tbody.appendChild(tr);
+    });
+    }
+
+    document.getElementById("formSalida").addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    if (productosSeleccionados.length === 0) {
+    alert("Debe agregar al menos un producto a la salida de bodega.");
+    return;
+    }
+
+    let formData = new FormData(this);
+    formData.set("ProductosJson", JSON.stringify(productosSeleccionados));
+
+    fetch('@Url.Action("Crear", "SalidaDeBodega")', {
+    method: "POST",
+    body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+    if (data.success) {
+    window.location.href = '@Url.Action("Index", "SalidaDeBodega")';
+    } else {
+    alert("Error al registrar la salida: " + data.message);
+    }
+    })
+    .catch(error => {
+    console.error("Error:", error);
+    alert("Hubo un problema al procesar la solicitud.");
+    });
+    });
     </script>
 }
 
 <style>
+    /* Hover de ítem Select2 personalizado */
     .select2-results__option--highlighted.select2-results__option--selectable {
         background-color: #fcd8b7 !important;
         color: black !important;
