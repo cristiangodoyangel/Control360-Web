@@ -126,18 +126,22 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto">
-                    <li class="nav-item">
-                        @Html.ActionLink("Inventario", "Index", "Productos", null, new { @class = "nav-link" })
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle fw-bold text-white" href="#" id="bodegaDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Bodega
+                        </a>
+                        <ul class="dropdown-menu bg-orange border-0 rounded-2 shadow">
+                            <li><a class="dropdown-item text-white fw-bold" href="@Url.Action("Index", "Productos")">Inventario</a></li>
+                            <li><a class="dropdown-item text-white fw-bold" href="@Url.Action("Index", "SalidaDeBodega")">Entrega de Materiales</a></li>
+                            <li><a class="dropdown-item text-white fw-bold" href="@Url.Action("Index", "Solicitudes")">Solicitud de Materiales</a></li>
+                            <li><a class="dropdown-item text-white fw-bold" href="@Url.Action("Index", "Reportes")">Reportes</a></li>
+                        </ul>
                     </li>
                     <li class="nav-item">
-                        @Html.ActionLink("Salida de Bodega", "Index", "SalidaDeBodega", null, new { @class = "nav-link" })
+                        <a class="nav-link fw-bold text-white" href="@Url.Action("Index", "Biblioteca")">Control Documental</a>
                     </li>
-                    <li class="nav-item">
-                        @Html.ActionLink("Solicitud de Material", "Index", "Solicitudes", null, new { @class = "nav-link" })
-                    </li>
-                    <li class="nav-item">
-                        @Html.ActionLink("Reportes", "Index", "Reportes", null, new { @class = "nav-link" })
-                    </li>
+
+
                 </ul>
                 
                 </ul>
@@ -163,3 +167,13 @@
     @RenderSection("Scripts", required: false)
 </body>
 </html>
+
+<style>
+    .bg-orange {
+        background-color: #f06529 !important; /* mismo naranja de tu app */
+    }
+
+    .dropdown-menu .dropdown-item:hover {
+        background-color: #e4571f !important; /* naranja un poco más oscuro al pasar el mouse */
+    }
+</style>

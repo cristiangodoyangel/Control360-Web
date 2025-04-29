@@ -195,6 +195,8 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BibliotecaController.cs" />
+    <Compile Include="Controllers\DebugController.cs" />
     <Compile Include="Controllers\EmpleadosController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -339,11 +341,18 @@
     <Content Include="Views\Reportes\Index.cshtml" />
     <Content Include="Views\Reportes\Inventario.cshtml" />
     <Content Include="Views\Reportes\Salidas.cshtml" />
+    <Content Include="Views\Biblioteca\camionetas.cshtml" />
+    <Content Include="Views\Biblioteca\HSEC.cshtml" />
+    <Content Include="Views\Biblioteca\Index.cshtml" />
+    <Content Include="Views\Biblioteca\Proyectos.cshtml" />
+    <Content Include="Views\Biblioteca\Trabajadores.cshtml" />
+    <Content Include="Views\Biblioteca\Categoria.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\NewFolder1\" />
     <Folder Include="images\" />
+    <Folder Include="Views\Debug\" />
     <Folder Include="Views\Empleados\" />
     <Folder Include="Views\Proveedores\" />
     <Folder Include="Views\Solicitud\" />
