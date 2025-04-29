@@ -1,0 +1,119 @@
+﻿@model Inventario360.Web.Models.FichaCamioneta
+
+@{
+    ViewBag.Title = "Editar Camioneta";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">✏️ Editar Camioneta</h2>
+    <hr style="border: 2px solid #333; margin-bottom: 15px;" />
+
+    @using (Html.BeginForm("Editar", "FichaCamioneta", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.ID)
+
+        <div class="row">
+            <!-- Información General -->
+            <div class="col-md-6">
+                <h4>Información General</h4>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.Patente, htmlAttributes: new { @class = "form-label" })
+                    @Html.EditorFor(m => m.Patente, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                    @Html.ValidationMessageFor(m => m.Patente, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.Marca, htmlAttributes: new { @class = "form-label" })
+                    @Html.EditorFor(m => m.Marca, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                    @Html.ValidationMessageFor(m => m.Marca, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.Modelo, htmlAttributes: new { @class = "form-label" })
+                    @Html.EditorFor(m => m.Modelo, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                    @Html.ValidationMessageFor(m => m.Modelo, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.Año, htmlAttributes: new { @class = "form-label" })
+                    @Html.EditorFor(m => m.Año, new { htmlAttributes = new { @class = "form-control", type = "number", required = "required" } })
+                    @Html.ValidationMessageFor(m => m.Año, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.Color, htmlAttributes: new { @class = "form-label" })
+                    @Html.EditorFor(m => m.Color, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                    @Html.ValidationMessageFor(m => m.Color, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.Kilometraje, htmlAttributes: new { @class = "form-label" })
+                    @Html.EditorFor(m => m.Kilometraje, new { htmlAttributes = new { @class = "form-control", type = "number", required = "required" } })
+                    @Html.ValidationMessageFor(m => m.Kilometraje, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.Estado, htmlAttributes: new { @class = "form-label" })
+                    @Html.DropDownListFor(m => m.Estado, new SelectList(new[] { "Disponible", "En uso", "Mantenimiento" }), "Seleccione Estado", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Estado, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.ResponsableID, htmlAttributes: new { @class = "form-label" })
+                    @Html.DropDownListFor(m => m.ResponsableID, (SelectList)ViewBag.Empleados, "Seleccione un Responsable", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.ResponsableID, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <!-- Documentación -->
+            <div class="col-md-6">
+                <h4>Documentación</h4>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.FechaMantenimiento, htmlAttributes: new { @class = "form-label" })
+                    @Html.TextBoxFor(m => m.FechaMantenimiento, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.FechaPermisoCirculacion, htmlAttributes: new { @class = "form-label" })
+                    @Html.TextBoxFor(m => m.FechaPermisoCirculacion, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.FechaSoap, htmlAttributes: new { @class = "form-label" })
+                    @Html.TextBoxFor(m => m.FechaSoap, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.FechaAntivuelcos, htmlAttributes: new { @class = "form-label" })
+                    @Html.TextBoxFor(m => m.FechaAntivuelcos, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.FechaLaminas, htmlAttributes: new { @class = "form-label" })
+                    @Html.TextBoxFor(m => m.FechaLaminas, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.FechaGPS, htmlAttributes: new { @class = "form-label" })
+                    @Html.TextBoxFor(m => m.FechaGPS, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.Acreditacion, htmlAttributes: new { @class = "form-label" })
+                    @Html.EditorFor(m => m.Acreditacion, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(m => m.Acreditacion, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <hr style="border: 2px solid #333;" />
+
+        <div class="text-end">
+            @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-secondary" })
+            <button type="submit" class="btn btn-orange">Guardar Cambios</button>
+        </div>
+    }
+</div>

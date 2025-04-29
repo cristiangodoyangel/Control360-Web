@@ -1,0 +1,103 @@
+﻿@model Inventario360.Web.Models.FichaCamioneta
+
+@{
+    ViewData["Title"] = "Crear Ficha Camioneta";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Nueva Ficha de Camioneta</h2>
+    <hr style="border: 2px solid #333;" />
+
+    <form action="@Url.Action("Crear", "FichaCamioneta")" method="post" class="row g-3">
+        <div class="col-md-4">
+            <label for="Patente" class="form-label">Patente</label>
+            <input name="Patente" class="form-control" required />
+        </div>
+
+        <div class="col-md-4">
+            <label for="Marca" class="form-label">Marca</label>
+            <input name="Marca" class="form-control" required />
+        </div>
+
+        <div class="col-md-4">
+            <label for="Modelo" class="form-label">Modelo</label>
+            <input name="Modelo" class="form-control" required />
+        </div>
+
+        <div class="col-md-3">
+            <label for="Año" class="form-label">Año</label>
+            <input name="Año" class="form-control" type="number" required />
+        </div>
+
+        <div class="col-md-3">
+            <label for="Color" class="form-label">Color</label>
+            <input name="Color" class="form-control" />
+        </div>
+
+        <div class="col-md-3">
+            <label for="Kilometraje" class="form-label">Kilometraje</label>
+            <input name="Kilometraje" class="form-control" type="number" />
+        </div>
+
+        <div class="col-md-3">
+            <label for="Estado" class="form-label">Estado</label>
+            <input name="Estado" class="form-control" />
+        </div>
+
+        <div class="col-md-4">
+            <label for="ResponsableID" class="form-label">Responsable</label>
+            <select name="ResponsableID" class="form-select">
+                <option value="">Seleccione</option>
+                @foreach (var emp in (SelectList)ViewBag.Empleados)
+                {
+                    <option value="@emp.Value">@emp.Text</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <label for="FechaPermisoCirculacion" class="form-label">Permiso de Circulación</label>
+            <input name="FechaPermisoCirculacion" class="form-control" type="date" />
+        </div>
+
+        <div class="col-md-4">
+            <label for="FechaSoap" class="form-label">SOAP</label>
+            <input name="FechaSoap" class="form-control" type="date" />
+        </div>
+
+        <div class="col-md-4">
+            <label for="FechaAntivuelcos" class="form-label">Antivuelcos</label>
+            <input name="FechaAntivuelcos" class="form-control" type="date" />
+        </div>
+
+        <div class="col-md-4">
+            <label for="FechaLaminas" class="form-label">Láminas</label>
+            <input name="FechaLaminas" class="form-control" type="date" />
+        </div>
+
+        <div class="col-md-4">
+            <label for="FechaGPS" class="form-label">GPS</label>
+            <input name="FechaGPS" class="form-control" type="date" />
+        </div>
+
+        <div class="col-md-4">
+            <label for="FechaMantenimiento" class="form-label">Mantenimiento</label>
+            <input name="FechaMantenimiento" class="form-control" type="date" />
+        </div>
+
+        <div class="col-md-4">
+            <label for="Acreditacion" class="form-label">Acreditación</label>
+            <input name="Acreditacion" class="form-control" />
+        </div>
+
+        <div class="col-12 mt-3 text-end">
+            <button type="submit" class="btn btn-orange">Guardar</button>
+            <a href="@Url.Action("Index", "FichaCamioneta")" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation-unobtrusive@3.2.11/jquery.validate.unobtrusive.min.js"></script>
+}

@@ -1,0 +1,56 @@
+﻿@model Inventario360.Web.Models.FichaEmpleado
+
+@{
+    ViewBag.Title = "Nueva Ficha de Empleado";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">➕ Nueva Ficha de Empleado</h2>
+
+    @using (Html.BeginForm("Crear", "FichaEmpleado", FormMethod.Post, new { @class = "card p-4 shadow" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="mb-3">
+            <label class="form-label">Empleado</label>
+            @Html.TextBoxFor(m => m.Empleado.Nombre, new { @class = "form-control", required = "required" })
+            @Html.ValidationMessageFor(m => m.Empleado.Nombre, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Fecha de Ingreso</label>
+            @Html.TextBoxFor(m => m.FechaIngreso, "{0:yyyy-MM-dd}", new { @type = "date", @class = "form-control", required = "required" })
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Fecha de Término de Contrato</label>
+            @Html.TextBoxFor(m => m.FechaTerminoContrato, "{0:yyyy-MM-dd}", new { @type = "date", @class = "form-control" })
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Fecha de Vencimiento de Examen</label>
+            @Html.TextBoxFor(m => m.FechaVencimientoExamen, "{0:yyyy-MM-dd}", new { @type = "date", @class = "form-control" })
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Curso Altura</label>
+            @Html.DropDownListFor(m => m.CursoAltura, new SelectList(new[] {
+                new { Value = "true", Text = "Sí" },
+                new { Value = "false", Text = "No" }
+            }, "Value", "Text"), new { @class = "form-control" })
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Acreditaciones</label>
+            @Html.TextBoxFor(m => m.Acreditaciones, new { @class = "form-control" })
+        </div>
+
+        <button type="submit" class="btn btn-orange">Guardar</button>
+        <a href="@Url.Action("Index", "FichaEmpleado")" class="btn btn-secondary">Cancelar</a>
+    }
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
+}

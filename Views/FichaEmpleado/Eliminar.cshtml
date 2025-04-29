@@ -1,0 +1,21 @@
+﻿@model Inventario360.Web.Models.FichaEmpleado
+
+@{
+    ViewBag.Title = "Eliminar Ficha de Empleado";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">🗑 Eliminar Ficha de Empleado</h2>
+
+    <div class="card p-4 shadow">
+        <p>¿Estás seguro de que deseas eliminar la ficha de <strong>@Model.EmpleadoID</strong>?</p>
+
+        @using (Html.BeginForm("Eliminar", "FichaEmpleado", FormMethod.Post))
+        {
+            @Html.HiddenFor(model => model.ID)
+
+            <button type="submit" class="btn btn-orange">Sí, eliminar</button>
+            <a href="@Url.Action("Index", "FichaEmpleado")" class="btn btn-secondary">Cancelar</a>
+        }
+    </div>
+</div>

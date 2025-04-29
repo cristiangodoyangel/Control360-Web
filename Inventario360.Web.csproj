@@ -198,6 +198,8 @@
     <Compile Include="Controllers\BibliotecaController.cs" />
     <Compile Include="Controllers\DebugController.cs" />
     <Compile Include="Controllers\EmpleadosController.cs" />
+    <Compile Include="Controllers\FichaCamionetaController.cs" />
+    <Compile Include="Controllers\FichaEmpleadoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProductosController.cs" />
@@ -347,6 +349,15 @@
     <Content Include="Views\Biblioteca\Proyectos.cshtml" />
     <Content Include="Views\Biblioteca\Trabajadores.cshtml" />
     <Content Include="Views\Biblioteca\Categoria.cshtml" />
+    <Content Include="Views\FichaCamioneta\Crear.cshtml" />
+    <Content Include="Views\FichaCamioneta\Detalle.cshtml" />
+    <Content Include="Views\FichaCamioneta\Editar.cshtml" />
+    <Content Include="Views\FichaCamioneta\Index.cshtml" />
+    <Content Include="Views\FichaEmpleado\Crear.cshtml" />
+    <Content Include="Views\FichaEmpleado\Detalle.cshtml" />
+    <Content Include="Views\FichaEmpleado\Editar.cshtml" />
+    <Content Include="Views\FichaEmpleado\Eliminar.cshtml" />
+    <Content Include="Views\FichaEmpleado\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

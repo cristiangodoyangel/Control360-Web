@@ -1,0 +1,243 @@
+﻿@model IEnumerable<Inventario360.Web.Models.FichaCamioneta>
+
+@{
+    ViewBag.Title = "Fichas de Camionetas";
+    var fechaHoy = DateTime.Now;
+    var resumen = new Dictionary<string, Tuple<int, int, int>>
+{
+        { "Permiso", Tuple.Create(0, 0, 0) },
+        { "Soap", Tuple.Create(0, 0, 0) },
+        { "Antivuelcos", Tuple.Create(0, 0, 0) },
+        { "Laminas", Tuple.Create(0, 0, 0) },
+        { "GPS", Tuple.Create(0, 0, 0) },
+        { "Mantenimiento", Tuple.Create(0, 0, 0) }
+    };
+    var clavesResumen = resumen.Keys.ToList(); // Copia para evitar modificar durante foreach
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-car-taxi-front">
+            <path d="M10 2h4" />
+            <path d="m21 8-2 2-1.5-3.7A2 2 0 0 0 15.646 5H8.4a2 2 0 0 0-1.903 1.257L5 10 3 8" />
+            <path d="M7 14h.01" />
+            <path d="M17 14h.01" />
+            <rect width="18" height="8" x="3" y="10" rx="2" />
+            <path d="M5 18v2" />
+            <path d="M19 18v2" />
+        </svg>
+        Fichas de Camionetas
+    </h2>
+
+    <div class="text-end mb-3">
+        <a href="@Url.Action("Crear", "FichaCamioneta")" class="btn btn-orange me-2">Nueva Ficha</a>
+        <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalEditarCamionetas">Editar</button>
+    </div>
+
+    <h5 class="titulo-seccion mt-5">📊 Estado Documental</h5>
+    <div class="d-flex justify-content-center align-items-center gap-3" style="min-height: 420px;">
+        <button id="prevGrafico" class="btn btn-orange"><i class="fas fa-chevron-left"></i></button>
+        <canvas id="graficoCamionetas" class="grafico-camionetas"></canvas>
+        <button id="nextGrafico" class="btn btn-orange"><i class="fas fa-chevron-right"></i></button>
+    </div>
+
+    <p class="text-center mt-2 fw-bold" id="tituloGrafico"></p>
+
+    @foreach (var tipo in clavesResumen)
+    {
+        <h5 class="titulo-seccion mt-4">📄 @tipo</h5>
+        <table id="tabla@tipo" class="table table-bordered table-sm table-hover display nowrap" style="width:100%">
+            <thead class="table-light text-center">
+                <tr>
+                    <th>Patente</th>
+                    <th>@tipo Vence</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int vigentes = 0, porVencer = 0, vencidos = 0;
+                }
+
+                @foreach (var c in Model)
+                {
+                    DateTime? fecha = tipo == "Permiso" ? c.FechaPermisoCirculacion :
+                                      tipo == "Soap" ? c.FechaSoap :
+                                      tipo == "Antivuelcos" ? c.FechaAntivuelcos :
+                                      tipo == "Laminas" ? c.FechaLaminas :
+                                      tipo == "GPS" ? c.FechaGPS :
+                                      tipo == "Mantenimiento" ? c.FechaMantenimiento : null;
+
+                    var clase = "table-success";
+                    if (fecha.HasValue)
+                    {
+                        var dias = (fecha.Value - fechaHoy).TotalDays;
+                        if (dias <= 0) { clase = "table-danger"; vencidos++; }
+                        else if (dias <= 30) { clase = "table-warning"; porVencer++; }
+                        else { vigentes++; }
+                    }
+
+                    <tr class="@clase">
+                        <td>@c.Patente</td>
+                        <td>@(fecha?.ToString("dd-MM-yyyy") ?? "N/A")</td>
+                    </tr>
+                }
+
+                // Actualiza resumen luego de recorrer
+                resumen[tipo] = Tuple.Create(vigentes, porVencer, vencidos);
+            </tbody>
+        </table>
+    }
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalEditarCamionetas" tabindex="-1" aria-labelledby="modalEditarLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title" id="modalEditarLabel">Editar Camionetas</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered table-sm table-hover">
+                        <thead class="table-light text-center">
+                            <tr>
+                                <th>Patente</th>
+                                <th>Marca</th>
+                                <th>Modelo</th>
+                                <th>Año</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var camioneta in Model)
+                            {
+                                <tr>
+                                    <td>@camioneta.Patente</td>
+                                    <td>@camioneta.Marca</td>
+                                    <td>@camioneta.Modelo</td>
+                                    <td>@camioneta.Año</td>
+                                    <td>
+                                        <a href="@Url.Action("Editar", "FichaCamioneta", new { id = camioneta.ID })" class="btn btn-sm btn-orange">Editar</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+
+
+    <script>
+        $(document).ready(function () {
+            const tablas = ["Permiso", "Soap", "Antivuelcos", "Laminas", "GPS", "Mantenimiento"];
+            tablas.forEach(id => $("#tabla" + id).DataTable({
+                responsive: true,
+                language: { url: "//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json" }
+            }));
+
+         const datos = [];
+@foreach (var kvp in resumen)
+{
+    var r = kvp.Value;
+    <text>
+    datos.push({
+        label: "@kvp.Key",
+        data: [@r.Item1, @r.Item2, @r.Item3],
+        backgroundColor: ['#28a745', '#ffc107', '#dc3545'],
+        labels: ["Vigente", "Por Vencer", "Vencido"]
+    });
+    </text>
+}
+
+
+            let index = 0;
+            const ctx = document.getElementById("graficoCamionetas").getContext("2d");
+            let grafico;
+
+            function render() {
+                const d = datos[index];
+                if (grafico) grafico.destroy();
+                grafico = new Chart(ctx, {
+                    type: "bar",
+                    data: { labels: d.labels, datasets: [{ label: d.label, data: d.data, backgroundColor: d.backgroundColor }] },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+                });
+                $("#tituloGrafico").text("📌 " + d.label);
+            }
+
+            $("#prevGrafico").click(() => { index = (index - 1 + datos.length) % datos.length; render(); });
+            $("#nextGrafico").click(() => { index = (index + 1) % datos.length; render(); });
+            render();
+        });
+    </script>
+}
+
+<style>
+
+    .titulo-seccion {
+        background-color: #f06529;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+
+    .table-bordered th, .table-bordered td {
+        border: 0.5px solid #ccc !important;
+        text-align: center;
+        vertical-align: middle;
+        font-size: 14px;
+        padding: 6px;
+    }
+
+    .grafico-camionetas {
+        max-width: 600px;
+        height: 400px;
+    }
+
+    .dropdown-menu.bg-orange {
+        background-color: #f06529 !important;
+    }
+
+        .dropdown-menu.bg-orange .dropdown-item {
+            color: white !important;
+            font-weight: bold;
+        }
+
+            .dropdown-menu.bg-orange .dropdown-item:hover {
+                background-color: #d9531e !important;
+            }
+
+    .grafico-camionetas {
+        width: 100% !important;
+        max-width: 600px;
+        height: 400px !important;
+        display: block;
+    }
+
+    canvas#graficoCamionetas {
+        display: block;
+        background-color: white;
+        padding: 10px;
+    }
+
+    #graficoCamionetas {
+        width: 100% !important;
+        max-width: 600px;
+        height: 400px !important;
+    }
+
+</style>
+

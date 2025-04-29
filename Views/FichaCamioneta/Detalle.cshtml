@@ -1,0 +1,72 @@
+﻿@model Inventario360.Web.Models.FichaCamioneta
+
+@{
+    ViewBag.Title = "Detalle de Camioneta";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">🚛 Detalle de Camioneta</h2>
+    <hr style="border: 2px solid #333; margin-bottom: 15px;" />
+
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Información General</h4>
+            <table class="table table-bordered">
+                <tbody>
+                    <tr><th>Patente</th><td>@Html.DisplayFor(m => m.Patente)</td></tr>
+                    <tr><th>Marca</th><td>@Html.DisplayFor(m => m.Marca)</td></tr>
+                    <tr><th>Modelo</th><td>@Html.DisplayFor(m => m.Modelo)</td></tr>
+                    <tr><th>Año</th><td>@Html.DisplayFor(m => m.Año)</td></tr>
+                    <tr><th>Color</th><td>@Html.DisplayFor(m => m.Color)</td></tr>
+                    <tr><th>Kilometraje</th><td>@Html.DisplayFor(m => m.Kilometraje) km</td></tr>
+                    <tr><th>Estado</th><td>@Html.DisplayFor(m => m.Estado)</td></tr>
+                    <tr><th>Responsable</th><td>@(Model.Responsable != null ? Model.Responsable.Nombre : "No asignado")</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-6">
+            <h4>Documentación</h4>
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th>Fecha de Mantenimiento</th>
+                        <td>@(Model.FechaMantenimiento?.ToString("dd-MM-yyyy") ?? "N/A")</td>
+                    </tr>
+                    <tr>
+                        <th>Permiso de Circulación</th>
+                        <td>@(Model.FechaPermisoCirculacion?.ToString("dd-MM-yyyy") ?? "N/A")</td>
+                    </tr>
+                    <tr>
+                        <th>SOAP</th>
+                        <td>@(Model.FechaSoap?.ToString("dd-MM-yyyy") ?? "N/A")</td>
+                    </tr>
+                    <tr>
+                        <th>Antivuelcos</th>
+                        <td>@(Model.FechaAntivuelcos?.ToString("dd-MM-yyyy") ?? "N/A")</td>
+                    </tr>
+                    <tr>
+                        <th>Láminas</th>
+                        <td>@(Model.FechaLaminas?.ToString("dd-MM-yyyy") ?? "N/A")</td>
+                    </tr>
+                    <tr>
+                        <th>GPS</th>
+                        <td>@(Model.FechaGPS?.ToString("dd-MM-yyyy") ?? "N/A")</td>
+                    </tr>
+                    <tr>
+                        <th>Acreditación</th>
+                        <td>@(string.IsNullOrEmpty(Model.Acreditacion) ? "N/A" : Model.Acreditacion)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <hr style="border: 2px solid #333; margin-bottom: 15px;" />
+
+    <div class="text-end">
+        @Html.ActionLink("Volver", "Index", null, new { @class = "btn btn-secondary" })
+        @Html.ActionLink("Editar", "Editar", new { id = Model.ID }, new { @class = "btn btn-secondary" })
+        <a href="@Url.Action("Eliminar", "FichaCamioneta", new { id = Model.ID })" class="btn btn-danger" onclick="return confirm('¿Seguro que deseas eliminar esta ficha?')">Eliminar</a>
+    </div>
+</div>
