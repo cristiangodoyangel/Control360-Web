@@ -1,0 +1,162 @@
+﻿@{
+    ViewBag.Title = "Resumen de Salidas de Bodega";
+}
+
+<div class="container mt-4">
+    <hr style="border: 2px solid #333; margin-bottom: 15px;" />
+
+    <h2 class="mb-4 text-center d-flex align-items-center justify-content-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
+            <path d="M3 21v-13l9-4 9 4v13" />
+            <path d="M13 13h4v8h-10v-6h6" />
+            <path d="M13 21v-9a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v3" />
+        </svg>
+        Resumen de Salidas de Bodega
+    </h2>
+
+    <div class="mb-4 d-flex justify-content-center">
+        <label for="selectMes" class="me-2 fw-bold">Seleccionar Mes:</label>
+        <select id="selectMes" class="form-select w-auto">
+            @for (int i = 1; i <= 12; i++)
+            {
+                <option value="@i">@System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i)</option>
+            }
+        </select>
+    </div>
+
+    <div class="row text-center d-flex justify-content-center mb-4">
+        <div class="col-md-3 mx-3">
+            <div class="card p-3 shadow">
+                <h5>📌 Proyecto más solicitado</h5>
+                <h4 id="proyectoMasSolicitado">No hay datos</h4>
+            </div>
+        </div>
+        <div class="col-md-3 mx-3">
+            <div class="card p-3 shadow">
+                <h5>👤 Empleado con más solicitudes</h5>
+                <h4 id="empleadoMasSolicitante">No hay datos</h4>
+            </div>
+        </div>
+        <div class="col-md-3 mx-3">
+            <div class="card p-3 shadow">
+                <h5>📦 Material más solicitado</h5>
+                <h4 id="materialMasSolicitado">No hay datos</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="row d-flex justify-content-center align-items-center">
+        <div class="col-md-6 mb-4">
+            <h5 class="text-center">📊 Top 3 Materiales Solicitados</h5>
+            <canvas id="chartMateriales"></canvas>
+        </div>
+        <div class="col-md-6 mb-4">
+            <h5 class="text-center">📋 Detalles de Materiales Solicitados</h5>
+            <table id="tablaMateriales" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Material</th>
+                        <th>Total Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="text-center mt-3">
+        <a href="@Url.Action("Index", "Reportes")" class="btn btn-secondary">Volver a Reportes</a>
+        <button id="btnImprimir" class="btn btn-secondary">&#128438; Imprimir</button>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            function cargarDatos(mes) {
+                $.ajax({
+                    url: '@Url.Action("ObtenerResumenSalidas", "SalidaDeBodega")',
+                    type: "GET",
+                    data: { mes: mes, año: new Date().getFullYear() },
+                    success: function (data) {
+                        console.log("📊 Datos recibidos:", data);
+
+                        $("#proyectoMasSolicitado").text(data.proyectosMasSolicitados?.nombreProyecto ?? "No hay datos");
+                        $("#empleadoMasSolicitante").text(data.empleadosMasSolicitantes?.nombreEmpleado ?? "No hay datos");
+
+                        let materiales = data.materialesMasSolicitados || [];
+                        let materialMasSolicitado = materiales.length > 0
+                            ? materiales[0].material + " (" + materiales[0].totalCantidad + ")"
+                            : "No hay datos";
+
+                        $("#materialMasSolicitado").text(materialMasSolicitado);
+
+                        actualizarGraficoMateriales(materiales);
+                        actualizarTablaMateriales(materiales);
+                    },
+                    error: function () {
+                        console.error("❌ Error al cargar los datos.");
+                    }
+                });
+            }
+
+            function actualizarGraficoMateriales(materiales) {
+                var canvas = document.getElementById("chartMateriales");
+                var ctx = canvas.getContext("2d");
+
+                if (window.graficoMateriales) {
+                    window.graficoMateriales.destroy();
+                }
+
+                window.graficoMateriales = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: materiales.map(function (m) { return m.material; }),
+                        datasets: [{
+                            label: 'Solicitudes',
+                            data: materiales.map(function (m) { return m.totalCantidad; }),
+                            backgroundColor: ["#FF8C42", "#FF7043", "#FF5733"]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                suggestedMax: Math.max(...materiales.map(m => m.totalCantidad), 100) + 50
+                            }
+                        }
+                    }
+                });
+            }
+
+            function actualizarTablaMateriales(materiales) {
+                var tableMateriales = $("#tablaMateriales tbody");
+                tableMateriales.empty();
+
+                if (materiales.length === 0) {
+                    tableMateriales.append("<tr><td colspan='2' class='text-center'>No hay datos</td></tr>");
+                    return;
+                }
+
+                materiales.forEach(function (m) {
+                    tableMateriales.append("<tr><td>" + m.material + "</td><td>" + m.totalCantidad + "</td></tr>");
+                });
+            }
+
+            $("#selectMes").change(function () {
+                cargarDatos($(this).val());
+            });
+
+            cargarDatos(new Date().getMonth() + 1);
+
+            $("#btnImprimir").click(function () {
+                window.print();
+            });
+        });
+    </script>
+}
