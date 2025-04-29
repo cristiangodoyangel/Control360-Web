@@ -1,0 +1,221 @@
+﻿@model IEnumerable<Inventario360.Web.Models.SalidaDeBodega>
+
+@{
+    ViewBag.Title = "Dashboard de Reportes";
+}
+
+<div class="container mt-4">
+
+    <hr style="border: 2px solid #333; margin-bottom: 15px;">
+
+    <h2 class="mb-4 text-center d-flex align-items-center justify-content-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M3 21v-13l9 -4l9 4v13" />
+            <path d="M13 13h4v8h-10v-6h6" />
+            <path d="M13 21v-9a1 1 0 0 0 -1 -1h-2a1 1 0 0 0 -1 1v3" />
+        </svg>
+        Inventario
+    </h2>
+
+    <div class="row d-flex justify-content-center align-items-center flex-wrap">
+        <div class="col-6 col-md-4 d-flex justify-content-center">
+            <canvas id="chartEstado" style="max-width: 220px; height: 220px;"></canvas>
+        </div>
+        <div class="col-6 col-md-4 d-flex justify-content-center">
+            <canvas id="chartCategoria" style="max-width: 220px; height: 220px;"></canvas>
+        </div>
+    </div>
+
+    <div class="row mt-3 d-flex justify-content-center">
+        <div class="col-3 col-md-2">
+            <div class="card shadow p-3 text-center">
+                <h6 class="fw-bold">Total</h6>
+                <h5 id="totalInventario" class="text-center">0</h5>
+            </div>
+        </div>
+        <div class="col-3 col-md-2">
+            <div class="card shadow p-3 text-center">
+                <h6 class="fw-bold text-warning">Bajo</h6>
+                <h5 id="productosStockBajo">0</h5>
+            </div>
+        </div>
+        <div class="col-3 col-md-2">
+            <div class="card shadow p-3 text-center">
+                <h6 class="fw-bold text-danger">Overstock</h6>
+                <h5 id="productosOverstock">0</h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-3">
+        <a href="@Url.Action("Inventario", "Reportes")" class="btn btn-secondary">Más información</a>
+    </div>
+
+    <hr style="border: 2px solid #333; margin-top: 20px;">
+
+    <h2 class="mb-4 text-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out me-2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" x2="9" y1="12" y2="12" />
+        </svg>
+        Salidas de Bodega
+    </h2>
+
+    <div class="row d-flex justify-content-center align-items-center">
+        <div class="col-12 col-md-4 text-center">
+            <canvas id="chartMateriales"></canvas>
+        </div>
+        <div class="col-12 col-md-4 text-center">
+            <canvas id="chartEmpleados"></canvas>
+        </div>
+        <div class="col-12 col-md-4 text-center">
+            <canvas id="chartProyectos"></canvas>
+        </div>
+    </div>
+
+    <div class="row mt-4 d-flex justify-content-center">
+        <div class="col-12 col-md-4">
+            <div class="card shadow p-3 text-center" style="min-height: 100px;">
+                <h6 class="fw-bold text-primary">Top 3 materiales más solicitados (mes)</h6>
+                <h5 id="topMateriales">Cargando...</h5>
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="card shadow p-3 text-center" style="min-height: 100px;">
+                <h6 class="fw-bold text-success">Empleado con más solicitudes (mes)</h6>
+                <h5 id="empleadoMasSolicitante">Cargando...</h5>
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="card shadow p-3 text-center" style="min-height: 100px;">
+                <h6 class="fw-bold text-warning">Proyecto con más solicitudes (mes)</h6>
+                <h5 id="proyectoMasSolicitado">Cargando...</h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-3">
+        <a href="@Url.Action("Salidas", "Reportes")" class="btn btn-secondary">Más información</a>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: '@Url.Action("ObtenerDatosReportes", "Reportes")',
+                type: "GET",
+                success: function (data) {
+                    console.log("Datos recibidos:", data);
+
+                    $("#totalInventario").text(data.totalInventario ?? 0);
+                    $("#productosStockBajo").text(data.productosStockBajo ?? 0);
+                    $("#productosOverstock").text(data.productosOverstock ?? 0);
+
+                    $("#topMateriales").text(
+                        data.materialesMasSolicitados?.length
+                            ? data.materialesMasSolicitados.slice(0, 3).map(function (m) {
+                                return m.material.toLowerCase() + " (" + m.totalSolicitudes + ")";
+                            }).join(", ")
+                            : "sin datos"
+                    );
+
+                    $("#empleadoMasSolicitante").text(data.empleadoMasSolicitante?.empleado?.toLowerCase() ?? "sin datos");
+                    $("#proyectoMasSolicitado").text(data.proyectoMasSolicitado?.proyecto?.toLowerCase() ?? "sin datos");
+
+                    if (Array.isArray(data.productosPorEstado) && data.productosPorEstado.length > 0) {
+                        var ctxEstado = document.getElementById('chartEstado').getContext('2d');
+                        new Chart(ctxEstado, {
+                            type: 'pie',
+                            data: {
+                                labels: data.productosPorEstado.map(function (e) { return e.estado; }),
+                                datasets: [{
+                                    data: data.productosPorEstado.map(function (e) { return e.cantidad; }),
+                                    backgroundColor: ['#FF8C42', '#FF5733'],
+                                    borderColor: ['#FFFFFF', '#FFFFFF'],
+                                    borderWidth: 2
+                                }]
+                            },
+                            options: { responsive: true, maintainAspectRatio: false }
+                        });
+                    }
+
+                    if (Array.isArray(data.productosPorCategoria) && data.productosPorCategoria.length > 0) {
+                        var ctxCategoria = document.getElementById('chartCategoria').getContext('2d');
+                        new Chart(ctxCategoria, {
+                            type: 'pie',
+                            data: {
+                                labels: data.productosPorCategoria.map(function (c) { return c.categoria; }),
+                                datasets: [{
+                                    data: data.productosPorCategoria.map(function (c) { return c.cantidad; }),
+                                    backgroundColor: ['#FFB347', '#FF7043'],
+                                    borderColor: ['#FFFFFF', '#FFFFFF'],
+                                    borderWidth: 2
+                                }]
+                            },
+                            options: { responsive: true, maintainAspectRatio: false }
+                        });
+                    }
+
+                    if (Array.isArray(data.materialesMasSolicitados) && data.materialesMasSolicitados.length > 0) {
+                        var ctxMateriales = document.getElementById('chartMateriales').getContext('2d');
+                        new Chart(ctxMateriales, {
+                            type: 'bar',
+                            data: {
+                                labels: data.materialesMasSolicitados.slice(0, 3).map(function (m) { return m.material.toLowerCase(); }),
+                                datasets: [{
+                                    label: 'Solicitudes',
+                                    data: data.materialesMasSolicitados.slice(0, 3).map(function (m) { return m.totalSolicitudes; }),
+                                    backgroundColor: ['#FF8C42', '#FF7043', '#FF5733']
+                                }]
+                            },
+                            options: { responsive: true, maintainAspectRatio: false }
+                        });
+                    }
+
+                    if (data.empleadoMasSolicitante && data.empleadoMasSolicitante.empleado) {
+                        var ctxEmpleados = document.getElementById('chartEmpleados').getContext('2d');
+                        new Chart(ctxEmpleados, {
+                            type: 'bar',
+                            data: {
+                                labels: [data.empleadoMasSolicitante.empleado.toLowerCase()],
+                                datasets: [{
+                                    label: 'Solicitudes',
+                                    data: [data.empleadoMasSolicitante.totalSolicitudes],
+                                    backgroundColor: ['#FF7043']
+                                }]
+                            },
+                            options: { responsive: true, maintainAspectRatio: false }
+                        });
+                    }
+
+                    if (data.proyectoMasSolicitado && data.proyectoMasSolicitado.proyecto) {
+                        var ctxProyectos = document.getElementById('chartProyectos').getContext('2d');
+                        new Chart(ctxProyectos, {
+                            type: 'bar',
+                            data: {
+                                labels: [data.proyectoMasSolicitado.proyecto.toLowerCase()],
+                                datasets: [{
+                                    label: 'Solicitudes',
+                                    data: [data.proyectoMasSolicitado.totalSolicitudes],
+                                    backgroundColor: ['#FF5733']
+                                }]
+                            },
+                            options: { responsive: true, maintainAspectRatio: false }
+                        });
+                    }
+
+                },
+                error: function (xhr) {
+                    console.error("Error al cargar los datos:", xhr.responseText);
+                    alert("Error al cargar los datos.");
+                }
+            });
+        });
+    </script>
+}

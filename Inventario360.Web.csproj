@@ -200,6 +200,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProductosController.cs" />
     <Compile Include="Controllers\ProveedoresController.cs" />
+    <Compile Include="Controllers\ReportesController.cs" />
     <Compile Include="Controllers\SalidaDeBodegaController.cs" />
     <Compile Include="Controllers\SolicitudController.cs" />
     <Compile Include="Data\InventarioDbContext.cs" />
@@ -335,6 +336,9 @@
     <Content Include="Views\SalidaDeBodega\Index.cshtml" />
     <Content Include="Views\Solicitudes\Index.cshtml" />
     <Content Include="Views\Solicitudes\Crear.cshtml" />
+    <Content Include="Views\Reportes\Index.cshtml" />
+    <Content Include="Views\Reportes\Inventario.cshtml" />
+    <Content Include="Views\Reportes\Salida.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
