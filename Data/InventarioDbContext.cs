@@ -1,17 +1,17 @@
 ﻿using System.Data.Entity;
 using Inventario360.Web.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Inventario360.Web.Data
 {
-    public class InventarioDbContext : DbContext
+    public class InventarioDbContext : IdentityDbContext<Usuario>
     {
-
-        static InventarioDbContext()
-        {
-            Database.SetInitializer<InventarioDbContext>(null);
-        }
-
         public InventarioDbContext() : base("DefaultConnection") { }
+
+        public static InventarioDbContext Create()
+        {
+            return new InventarioDbContext();
+        }
 
         public DbSet<Producto> Producto { get; set; }
         public DbSet<Proveedor> Proveedor { get; set; }
@@ -24,15 +24,10 @@ namespace Inventario360.Web.Data
         public DbSet<FichaCamioneta> FichaCamionetas { get; set; }
         public DbSet<SolicitudDeMaterial> SolicitudDeMaterial { get; set; }
 
-    
-
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Producto>().ToTable("Producto");
 
-            modelBuilder.Entity<Producto>().ToTable("Producto"); // 
-
-            base.OnModelCreating(modelBuilder);           
-            
             modelBuilder.Entity<SalidaDeBodega>()
                 .HasRequired(s => s.SolicitanteObj)
                 .WithMany()
@@ -47,7 +42,8 @@ namespace Inventario360.Web.Data
                 .HasRequired(s => s.ProyectoObj)
                 .WithMany()
                 .HasForeignKey(s => s.ProyectoAsignado);
-            
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

@@ -1,0 +1,31 @@
+﻿@model Inventario360.Web.Models.ViewModels.RolesViewModel
+
+@{
+    ViewBag.Title = "Asignar Roles";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="mb-4">Asignar Roles a @Model.NombreUsuario</h2>
+
+@using (Html.BeginForm("Roles", "Usuarios", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.Hidden("UserId", Model.UserId)
+
+    <div class="form-group">
+        @foreach (var rol in Model.TodosLosRoles)
+        {
+            <div class="form-check">
+                <input type="checkbox"
+                       name="RolesSeleccionados"
+                       value="@rol"
+                       class="form-check-input"
+                       @(Model.RolesAsignados.Contains(rol) ? "checked=\"checked\"" : "") />
+                <label class="form-check-label">@rol</label>
+            </div>
+        }
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Guardar Roles</button>
+    <a href="@Url.Action("Index", "Usuarios")" class="btn btn-secondary mt-3">Cancelar</a>
+}
