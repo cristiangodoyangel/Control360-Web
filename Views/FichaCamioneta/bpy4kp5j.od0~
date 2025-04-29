@@ -91,7 +91,7 @@
                     </tr>
                 }
 
-              
+                resumen[tipo] = Tuple.Create(vigentes, porVencer, vencidos);
             </tbody>
         </table>
     }

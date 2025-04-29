@@ -99,20 +99,7 @@
                     var tiene = !string.IsNullOrEmpty(ficha.Acreditaciones);
                     var claseFila = tiene ? "table-success" : "table-danger";
                     <tr class="@claseFila">
-                        <td>
-                            @if (ficha.Empleado == null)
-                            {
-                                <span>Empleado es NULL</span>
-                            }
-                            else if (string.IsNullOrEmpty(ficha.Empleado.Nombre))
-                            {
-                                <span>Nombre de Empleado es vacío</span>
-                            }
-                            else
-                            {
-                                @ficha.Empleado.Nombre
-                            }
-                        </td>
+                        <td>@ficha.Empleado?.Nombre</td>
                         <td>@(tiene ? ficha.Acreditaciones : "N/A")</td>
                     </tr>
                 }
@@ -131,24 +118,10 @@
             <tbody>
                 @foreach (var ficha in Model)
                 {
-                    var tiene = !string.IsNullOrEmpty(ficha.Acreditaciones);
-                    var claseFila = tiene ? "table-success" : "table-danger";
+                    var claseFila = ficha.CursoAltura ? "table-success" : "table-danger";
                     <tr class="@claseFila">
-                        <td>
-                            @if (ficha.Empleado == null)
-                            {
-                                <span>Empleado es NULL</span>
-                            }
-                            else if (string.IsNullOrEmpty(ficha.Empleado.Nombre))
-                            {
-                                <span>Nombre de Empleado es vacío</span>
-                            }
-                            else
-                            {
-                                @ficha.Empleado.Nombre
-                            }
-                        </td>
-                        <td>@(tiene ? ficha.Acreditaciones : "N/A")</td>
+                        <td>@ficha.Empleado?.Nombre</td>
+                        <td>@(ficha.CursoAltura ? "✅ Sí" : "❌ No")</td>
                     </tr>
                 }
             </tbody>
@@ -166,24 +139,19 @@
             <tbody>
                 @foreach (var ficha in Model)
                 {
-                    var tiene = !string.IsNullOrEmpty(ficha.Acreditaciones);
-                    var claseFila = tiene ? "table-success" : "table-danger";
+                    var claseFila = "table-success";
+                    if (ficha.FechaTerminoContrato.HasValue)
+                    {
+                        var dias = (ficha.FechaTerminoContrato.Value - DateTime.Now).TotalDays;
+                        if (dias <= 0) { claseFila = "table-danger"; }
+                        else if (dias <= 30) { claseFila = "table-warning"; }
+
+
+                    }
+
                     <tr class="@claseFila">
-                        <td>
-                            @if (ficha.Empleado == null)
-                            {
-                                <span>Empleado es NULL</span>
-                            }
-                            else if (string.IsNullOrEmpty(ficha.Empleado.Nombre))
-                            {
-                                <span>Nombre de Empleado es vacío</span>
-                            }
-                            else
-                            {
-                                @ficha.Empleado.Nombre
-                            }
-                        </td>
-                        <td>@(tiene ? ficha.Acreditaciones : "N/A")</td>
+                        <td>@ficha.Empleado?.Nombre</td>
+                        <td>@(ficha.FechaTerminoContrato?.ToString("dd-MM-yyyy") ?? "N/A")</td>
                     </tr>
                 }
             </tbody>
@@ -201,24 +169,19 @@
             <tbody>
                 @foreach (var ficha in Model)
                 {
-                    var tiene = !string.IsNullOrEmpty(ficha.Acreditaciones);
-                    var claseFila = tiene ? "table-success" : "table-danger";
+                    var claseFila = "table-success";
+                    if (ficha.FechaVencimientoExamen.HasValue)
+                    {
+                        var dias = (ficha.FechaVencimientoExamen.Value - DateTime.Now).TotalDays;
+                        if (dias <= 0) { claseFila = "table-danger"; }
+                        else if (dias <= 30) { claseFila = "table-warning"; }
+
+
+                    }
+
                     <tr class="@claseFila">
-                        <td>
-                            @if (ficha.Empleado == null)
-                            {
-                                <span>Empleado es NULL</span>
-                            }
-                            else if (string.IsNullOrEmpty(ficha.Empleado.Nombre))
-                            {
-                                <span>Nombre de Empleado es vacío</span>
-                            }
-                            else
-                            {
-                                @ficha.Empleado.Nombre
-                            }
-                        </td>
-                        <td>@(tiene ? ficha.Acreditaciones : "N/A")</td>
+                        <td>@ficha.Empleado?.Nombre</td>
+                        <td>@(ficha.FechaVencimientoExamen?.ToString("dd-MM-yyyy") ?? "N/A")</td>
                     </tr>
                 }
             </tbody>
