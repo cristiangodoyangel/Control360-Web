@@ -204,6 +204,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProductosController.cs" />
     <Compile Include="Controllers\ProveedoresController.cs" />
+    <Compile Include="Controllers\ProyectosController.cs" />
     <Compile Include="Controllers\ReportesController.cs" />
     <Compile Include="Controllers\SalidaDeBodegaController.cs" />
     <Compile Include="Controllers\SolicitudController.cs" />
@@ -374,6 +375,10 @@
     <Content Include="Views\Usuarios\Editar.cshtml" />
     <Content Include="Views\Usuarios\Index.cshtml" />
     <Content Include="Views\Usuarios\Roles.cshtml" />
+    <Content Include="Views\Proyectos\Crear.cshtml" />
+    <Content Include="Views\Proyectos\Editar.cshtml" />
+    <Content Include="Views\Proyectos\Eliminar.cshtml" />
+    <Content Include="Views\Proyectos\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

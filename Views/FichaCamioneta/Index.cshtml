@@ -33,7 +33,7 @@
         resumen[tipo] = Tuple.Create(vigentes, porVencer, vencidos);
     }
 }
-
+<h2 class="mb-4 text-center"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-car-taxi-front-icon lucide-car-taxi-front"><path d="M10 2h4" /><path d="m21 8-2 2-1.5-3.7A2 2 0 0 0 15.646 5H8.4a2 2 0 0 0-1.903 1.257L5 10 3 8" /><path d="M7 14h.01" /><path d="M17 14h.01" /><rect width="18" height="8" x="3" y="10" rx="2" /><path d="M5 18v2" /><path d="M19 18v2" /></svg>Fichas de Camionetas</h2>
 <div class="text-end mb-3">
     <a href="@Url.Action("Crear", "FichaCamioneta")" class="btn btn-orange me-2">Nueva Ficha</a>
     <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalEditarCamionetas">Editar</button>
@@ -53,90 +53,90 @@
 
 
 
-    @foreach (var tipo in clavesResumen)
-    {
-        <h5 class="titulo-seccion mt-4">📄 @tipo</h5>
-        <table id="tabla@tipo" class="table table-bordered table-sm table-hover display nowrap" style="width:100%">
-            <thead class="table-light text-center">
-                <tr>
-                    <th>Patente</th>
-                    <th>@tipo Vence</th>
-                </tr>
-            </thead>
-            <tbody>
-                @{
-                    int vigentes = 0, porVencer = 0, vencidos = 0;
-                }
-                @foreach (var c in Model)
+@foreach (var tipo in clavesResumen)
+{
+    <h5 class="titulo-seccion mt-4">📄 @tipo</h5>
+    <table id="tabla@tipo" class="table table-bordered table-sm table-hover display nowrap" style="width:100%">
+        <thead class="table-light text-center">
+            <tr>
+                <th>Patente</th>
+                <th>@tipo Vence</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int vigentes = 0, porVencer = 0, vencidos = 0;
+            }
+            @foreach (var c in Model)
+            {
+                DateTime? fecha = tipo == "Permiso" ? c.FechaPermisoCirculacion :
+                                  tipo == "Soap" ? c.FechaSoap :
+                                  tipo == "Antivuelcos" ? c.FechaAntivuelcos :
+                                  tipo == "Laminas" ? c.FechaLaminas :
+                                  tipo == "GPS" ? c.FechaGPS :
+                                  tipo == "Mantenimiento" ? c.FechaMantenimiento : null;
+
+                var clase = "table-success";
+                if (fecha.HasValue)
                 {
-                    DateTime? fecha = tipo == "Permiso" ? c.FechaPermisoCirculacion :
-                                      tipo == "Soap" ? c.FechaSoap :
-                                      tipo == "Antivuelcos" ? c.FechaAntivuelcos :
-                                      tipo == "Laminas" ? c.FechaLaminas :
-                                      tipo == "GPS" ? c.FechaGPS :
-                                      tipo == "Mantenimiento" ? c.FechaMantenimiento : null;
-
-                    var clase = "table-success";
-                    if (fecha.HasValue)
-                    {
-                        var dias = (fecha.Value - fechaHoy).TotalDays;
-                        if (dias <= 0) { clase = "table-danger"; vencidos++; }
-                        else if (dias <= 30) { clase = "table-warning"; porVencer++; }
-                        else { vigentes++; }
-                    }
-
-                    <tr class="@clase">
-                        <td>@c.Patente</td>
-                        <td>@(fecha?.ToString("dd-MM-yyyy") ?? "N/A")</td>
-                    </tr>
+                    var dias = (fecha.Value - fechaHoy).TotalDays;
+                    if (dias <= 0) { clase = "table-danger"; vencidos++; }
+                    else if (dias <= 30) { clase = "table-warning"; porVencer++; }
+                    else { vigentes++; }
                 }
 
-              
-            </tbody>
-        </table>
-    }
+                <tr class="@clase">
+                    <td>@c.Patente</td>
+                    <td>@(fecha?.ToString("dd-MM-yyyy") ?? "N/A")</td>
+                </tr>
+            }
 
-    <!-- Modal -->
-    <div class="modal fade" id="modalEditarCamionetas" tabindex="-1" aria-labelledby="modalEditarLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header bg-dark text-white">
-                    <h5 class="modal-title" id="modalEditarLabel">Editar Camionetas</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                </div>
-                <div class="modal-body">
-                    <table class="table table-bordered table-sm table-hover">
-                        <thead class="table-light text-center">
+
+        </tbody>
+    </table>
+}
+
+<!-- Modal -->
+<div class="modal fade" id="modalEditarCamionetas" tabindex="-1" aria-labelledby="modalEditarLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="modalEditarLabel">Editar Camionetas</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-sm table-hover">
+                    <thead class="table-light text-center">
+                        <tr>
+                            <th>Patente</th>
+                            <th>Marca</th>
+                            <th>Modelo</th>
+                            <th>Año</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var camioneta in Model)
+                        {
                             <tr>
-                                <th>Patente</th>
-                                <th>Marca</th>
-                                <th>Modelo</th>
-                                <th>Año</th>
-                                <th>Acción</th>
+                                <td>@camioneta.Patente</td>
+                                <td>@camioneta.Marca</td>
+                                <td>@camioneta.Modelo</td>
+                                <td>@camioneta.Año</td>
+                                <td>
+                                    <a href="@Url.Action("Editar", "FichaCamioneta", new { id = camioneta.ID })" class="btn btn-sm btn-orange">Editar</a>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var camioneta in Model)
-                            {
-                                <tr>
-                                    <td>@camioneta.Patente</td>
-                                    <td>@camioneta.Marca</td>
-                                    <td>@camioneta.Modelo</td>
-                                    <td>@camioneta.Año</td>
-                                    <td>
-                                        <a href="@Url.Action("Editar", "FichaCamioneta", new { id = camioneta.ID })" class="btn btn-sm btn-orange">Editar</a>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                </div>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
+</div>
 </div>
 
 @section Scripts {
