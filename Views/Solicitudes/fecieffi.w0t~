@@ -50,36 +50,36 @@
                     <input type="hidden" id="ITEM" />
                     <div class="mb-3 text-center">
                         <label class="form-label d-block">Nombre del Material</label>
-                        <input type="text" class="form-control mx-auto", style = "max-width: 600px;" id="NombreTecnico">
+                        <input type="text" class="form-control mx-auto, style = "max-width: 600px;" " id="NombreTecnico">
                     </div>
-                    <div class="mb-3 text-center">
+                    <div class="mb-3">
                         <label class="form-label">Cantidad</label>
-                        <input type="number" class="form-control mx-auto", style = "max-width: 600px;" id="Cantidad" required>
+                        <input type="number" class="form-control" id="Cantidad" required>
                     </div>
-                    <div class="mb-3 text-center">
+                    <div class="mb-3">
                         <label class="form-label">Medida</label>
-                        <input type="text" class="form-control mx-auto", style = "max-width: 600px;" id="Medida" required>
+                        <input type="text" class="form-control" id="Medida" required>
                     </div>
-                    <div class="mb-3 text-center">
+                    <div class="mb-3">
                         <label class="form-label">Unidad de Medida</label>
-                        <input type="text" class="form-control mx-auto", style = "max-width: 600px;" id="UnidadMedida" required>
+                        <input type="text" class="form-control" id="UnidadMedida" required>
                     </div>
-                    <div class="mb-3 text-center">
+                    <div class="mb-3">
                         <label class="form-label">Marca</label>
-                        <input type="text" class="form-control mx-auto", style = "max-width: 600px;" id="Marca">
+                        <input type="text" class="form-control" id="Marca">
                     </div>
-                    <div class="mb-3 text-center">
+                    <div class="mb-3">
                         <label class="form-label">Descripción</label>
-                        <textarea class="form-control mx-auto", style = "max-width: 600px;" id="Descripcion"></textarea>
+                        <textarea class="form-control" id="Descripcion"></textarea>
                     </div>
-                    <div class="mb-3 text-center">
+                    <div class="mb-3">
                         <label class="form-label">Imagen del Producto</label>
-                        <input type="file" class="form-control mx-auto", style = "max-width: 600px;" id="ImagenInput" accept="image/*">
+                        <input type="file" class="form-control" id="ImagenInput" accept="image/*">
                         <img id="PreviewImagen" src="" alt="Imagen del Producto" style="display:none; max-width:150px; margin-top:10px;">
                     </div>
-                    <div class="mb-3 text-center">
+                    <div class="mb-3">
                         <label class="form-label">Proveedor</label>
-                        <select id="Proveedor" class="form-control mx-auto", style = "max-width: 600px;">
+                        <select id="Proveedor" class="form-control">
                             <option value="">Seleccione un proveedor</option>
                             @foreach (var proveedor in ViewBag.Proveedores)
                             {
@@ -90,9 +90,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-orange" id="btnGuardar">Guardar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             </div>
         </div>
     </div>

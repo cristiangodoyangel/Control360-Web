@@ -15,7 +15,7 @@
 
             <div class="mb-3">
                 <label class="form-label">Nombre Técnico</label>
-                @Html.TextBoxFor(m => m.NombreTecnico, new { @class = "form-control", required = "required" })
+                @Html.TextBoxFor(m => m.NombreTecnico, new { @class = "form-control", required = "required",style = "max-width: 400px;" })
             </div>
 
             <div class="row">
@@ -75,8 +75,9 @@
             </div>
 
             <div class="text-end">
-                <button type="submit" class="btn btn-orange">Guardar Producto</button>
                 @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-secondary" })
+                <button type="submit" class="btn btn-orange">Guardar Producto</button>
+
             </div>
         }
     </div>

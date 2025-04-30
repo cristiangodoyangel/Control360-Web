@@ -69,10 +69,10 @@
         Fichas de Empleados
     </h2>
 
-    @*<div class="text-end mb-3">
-            <a href="@Url.Action("Crear")" class="btn btn-orange me-2">Nueva Ficha</a>
-            <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalEditarEmpleados">Editar</button>
-        </div>*@
+    /*<div class="text-end mb-3">
+        <a href="@Url.Action("Crear")" class="btn btn-orange me-2">Nueva Ficha</a>
+        <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalEditarEmpleados">Editar</button>
+    </div>*/
 
     <h5 class="titulo-seccion mt-5">📊 Estado Documental</h5>
     <div style="width: 50%; border: 1px solid #ccc; margin: 20px auto; ">
@@ -87,7 +87,7 @@
     <div class="container mt-4">
         <h2 class="mb-4 text-center">🧾 Fichas de Empleados</h2>
 
-
+       
 
         <h5 class="titulo-seccion">📚 Acreditaciones</h5>
         <table id="tablaAcreditaciones" class="table table-bordered table-sm table-hover display nowrap" style="width:100%">
