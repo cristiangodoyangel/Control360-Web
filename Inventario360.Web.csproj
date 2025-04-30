@@ -196,6 +196,7 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BibliotecaController.cs" />
+    <Compile Include="Controllers\CamionetasController.cs" />
     <Compile Include="Controllers\DebugController.cs" />
     <Compile Include="Controllers\EmpleadosController.cs" />
     <Compile Include="Controllers\FichaCamionetaController.cs" />
@@ -379,14 +380,25 @@
     <Content Include="Views\Proyectos\Editar.cshtml" />
     <Content Include="Views\Proyectos\Eliminar.cshtml" />
     <Content Include="Views\Proyectos\Index.cshtml" />
+    <Content Include="Views\Proveedores\Crear.cshtml" />
+    <Content Include="Views\Proveedores\Editar.cshtml" />
+    <Content Include="Views\Proveedores\Eliminar.cshtml" />
+    <Content Include="Views\Proveedores\Index.cshtml" />
+    <Content Include="Views\Empleados\Index.cshtml" />
+    <Content Include="Views\Empleados\Editar.cshtml" />
+    <Content Include="Views\Empleados\Crear.cshtml" />
+    <Content Include="Views\Empleados\Eliminar.cshtml" />
+    <Content Include="Views\Camionetas\Crear.cshtml" />
+    <Content Include="Views\Camionetas\Detalle.cshtml" />
+    <Content Include="Views\Camionetas\Editar.cshtml" />
+    <Content Include="Views\Camionetas\Eliminar.cshtml" />
+    <Content Include="Views\Camionetas\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\NewFolder1\" />
     <Folder Include="images\" />
     <Folder Include="Views\Debug\" />
-    <Folder Include="Views\Empleados\" />
-    <Folder Include="Views\Proveedores\" />
     <Folder Include="Views\Solicitud\" />
   </ItemGroup>
   <ItemGroup>

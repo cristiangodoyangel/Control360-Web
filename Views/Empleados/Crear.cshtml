@@ -1,0 +1,63 @@
+﻿@model Inventario360.Web.Models.ViewModels.EmpleadoConFichaViewModel
+
+@{
+    ViewBag.Title = "Crear Empleado";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-center"> Crear Empleado con Ficha</h2>
+
+    @using (Html.BeginForm("Crear", "Empleados", FormMethod.Post, new { @class = "card p-4 shadow" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="mb-3 text-center">
+            @Html.LabelFor(m => m.Nombre, new { @class = "form-label d" })
+            @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control mx-auto", style = "max-width: 600px;", required = "required" })
+        </div>
+
+        <div class="mb-3 text-center">
+            @Html.LabelFor(m => m.Cargo, new { @class = "form-label d-block" })
+            @Html.TextBoxFor(m => m.Cargo, new { @class = "form-control mx-auto", style = "max-width: 600px;", required = "required" })
+        </div>
+
+        <div class="mb-3 text-center">
+            @Html.LabelFor(m => m.FechaIngreso, new { @class = "form-label d-block" })
+            @Html.TextBoxFor(m => m.FechaIngreso, new { @class = "form-control mx-auto", style = "max-width: 600px;", type = "date", required = "required" })
+        </div>
+
+        <div class="mb-3 text-center">
+            @Html.LabelFor(m => m.FechaTerminoContrato, new { @class = "form-label d-block" })
+            @Html.TextBoxFor(m => m.FechaTerminoContrato, new { @class = "form-control mx-auto", style = "max-width: 600px;", type = "date" })
+        </div>
+
+        <div class="mb-3 text-center">
+            @Html.LabelFor(m => m.FechaVencimientoExamen, new { @class = "form-label d-block" })
+            @Html.TextBoxFor(m => m.FechaVencimientoExamen, new { @class = "form-control mx-auto", style = "max-width: 600px;", type = "date" })
+        </div>
+
+        <div class="mb-3 text-center">
+            @Html.LabelFor(m => m.CursoAltura, new { @class = "form-label d-block" })
+            @Html.DropDownListFor(m => m.CursoAltura, new List<SelectListItem>
+            {
+                new SelectListItem { Text = "Sí", Value = "true" },
+                new SelectListItem { Text = "No", Value = "false" }
+            }, new { @class = "form-select  mx-auto", style = "max-width: 600px;" })
+        </div>
+
+        <div class="mb-3 text-center">
+            @Html.LabelFor(m => m.Acreditaciones, new { @class = "form-label d-block" })
+            @Html.TextBoxFor(m => m.Acreditaciones, new { @class = "form-control mx-auto", style = "max-width: 600px;" })
+        </div>
+        <div class="col-12 mt-3 text-end">
+            <a href="@Url.Action("Index", "Empleados")" class="btn btn-secondary">Volver</a>
+            <button type="submit" class="btn btn-orange">Guardar</button>
+
+        </div>
+    }
+</div>
+
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+        }

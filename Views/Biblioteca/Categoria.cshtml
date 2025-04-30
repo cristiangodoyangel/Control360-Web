@@ -9,63 +9,66 @@
         <a href="@Url.Action("Index", "Biblioteca")" class="btn btn-secondary">⬅ Volver a la Biblioteca</a>
     </div>
 
-    <div class="card mb-4">
-        <div class="card-header bg-orange text-white">
-            📤 Subir Nuevo Documento
+    @if (User.IsInRole("Administrador") || User.IsInRole("Gerencia") || User.IsInRole("Proyectos"))
+    {
+        <div class="card mb-4">
+            <div class="card-header bg-orange text-white">
+                📤 Subir Nuevo Documento
+            </div>
+            <div class="card-body">
+                <form id="formSubirDocumento" enctype="multipart/form-data">
+                    <input type="hidden" id="categoriaActual" value="@ViewBag.Categoria" />
+                    <div class="mb-3">
+                        <label class="form-label">Título del Documento</label>
+                        <input type="text" name="titulo" id="tituloDocumento" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Seleccione el Archivo</label>
+                        <input type="file" name="archivo" id="archivoDocumento" class="form-control" accept=".pdf,.docx,.xlsx,.jpg,.png" required />
+                    </div>
+                    <button type="button" id="btnSubirDocumento" class="btn btn-secondary">Subir Documento</button>
+                </form>
+            </div>
         </div>
-        <div class="card-body">
-            <form id="formSubirDocumento" enctype="multipart/form-data">
-                <input type="hidden" id="categoriaActual" value="@ViewBag.Categoria" />
-                <div class="mb-3">
-                    <label class="form-label">Título del Documento</label>
-                    <input type="text" name="titulo" id="tituloDocumento" class="form-control" required />
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Seleccione el Archivo</label>
-                    <input type="file" name="archivo" id="archivoDocumento" class="form-control" accept=".pdf,.docx,.xlsx,.jpg,.png" required />
-                </div>
-                <button type="button" id="btnSubirDocumento" class="btn btn-secondary">Subir Documento</button>
-            </form>
-        </div>
-    </div>
-
-    <div class="card">
-        <div class="card-header bg-orange text-white">
-            📂 Documentos Disponibles
-        </div>
-        <div class="card-body">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Nombre del Archivo</th>
-                        <th class="text-end">Acción</th>
-                    </tr>
-                </thead>
-                <tbody id="listaDocumentos">
-                    @if (ViewBag.Archivos != null && ViewBag.Archivos.Count > 0)
-                    {
-                        foreach (string archivo in ViewBag.Archivos)
+    }
+        <div class="card">
+            <div class="card-header bg-orange text-white">
+                📂 Documentos Disponibles
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nombre del Archivo</th>
+                            <th class="text-end">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaDocumentos">
+                        @if (ViewBag.Archivos != null && ViewBag.Archivos.Count > 0)
+                        {
+                            foreach (string archivo in ViewBag.Archivos)
+                            {
+                                <tr>
+                                    <td>@archivo</td>
+                                    <td class="text-end">
+                                        <a href="@Url.Content("~/documentos/" + ViewBag.Categoria + "/" + archivo)" target="_blank" class="btn btn-secondary btn-sm">📥 Descargar</a>
+                                        @if (User.IsInRole("Administrador") || User.IsInRole("Gerencia") || User.IsInRole("Proyectos"))
+                                        {<button class="btn btn-orange btn-sm btnEliminar" data-archivo="@archivo">🗑 Eliminar</button>}
+                                        </td>
+                                </tr>
+                            }
+                        }
+                        else
                         {
                             <tr>
-                                <td>@archivo</td>
-                                <td class="text-end">
-                                    <a href="@Url.Content("~/documentos/" + ViewBag.Categoria + "/" + archivo)" target="_blank" class="btn btn-secondary btn-sm">📥 Descargar</a>
-                                    <button class="btn btn-orange btn-sm btnEliminar" data-archivo="@archivo">🗑 Eliminar</button>
-                                </td>
+                                <td colspan="2" class="text-center text-muted">No hay documentos disponibles.</td>
                             </tr>
                         }
-                    }
-                    else
-                    {
-                        <tr>
-                            <td colspan="2" class="text-center text-muted">No hay documentos disponibles.</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
 
 <!-- Modales -->
 <div class="modal fade" id="modalMensaje" tabindex="-1" aria-labelledby="modalMensajeLabel" aria-hidden="true">

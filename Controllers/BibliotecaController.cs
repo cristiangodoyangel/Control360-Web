@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 
 namespace Inventario360.Web.Controllers
 {
@@ -128,5 +130,7 @@ namespace Inventario360.Web.Controllers
 
             return Json(new { success = false, message = "El archivo no existe." });
         }
+
+
     }
 }

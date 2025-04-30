@@ -1,0 +1,36 @@
+﻿@model Inventario360.Web.Models.Proveedor
+
+@{
+    ViewBag.Title = "Crear Proveedor";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Crear Proveedor</h2>
+
+    @using (Html.BeginForm("Crear", "Proveedores", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="mb-3 text-center">
+            @Html.LabelFor(m => m.Nombre, htmlAttributes: new { @class = "form-label d-block" })
+            @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control mx-auto", style = "max-width: 600px;" })
+            @Html.ValidationMessageFor(m => m.Nombre, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="mb-3 text-center">
+            @Html.LabelFor(m => m.Contacto, htmlAttributes: new { @class = "form-label d-block" })
+            @Html.TextBoxFor(m => m.Contacto, new { @class = "form-control mx-auto", style = "max-width: 600px;" })
+            @Html.ValidationMessageFor(m => m.Contacto, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-12 mt-3 text-end">
+            <a href="@Url.Action("Index", "Proveedores")" class="btn btn-secondary ms-2">Volver</a>
+
+            <button type="submit" class="btn btn-orange">Guardar</button>
+            </div>
+            }
+        </div>
+
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+        }

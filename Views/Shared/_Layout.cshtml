@@ -1,4 +1,6 @@
 ﻿@inherits System.Web.Mvc.WebViewPage
+@using System.Security.Claims
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -11,148 +13,106 @@
     <link rel="stylesheet" href="~/Content/Site.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
-
-    <style>
-        .btn-orange {
-            background-color: #f06529 !important;
-            border-radius: 5px;
-            border-color: #f06529 !important;
-            color: white !important;
-        }
-
-            .btn-orange:hover {
-                background-color: #d9531e !important;
-                border-color: #d9531e !important;
-            }
-
-        .btn-icon {
-            background-color: transparent !important;
-            border: 1px solid #000000 !important;
-            color: #f06529 !important;
-            border-radius: 5px;
-            font-size: 1.2rem;
-            padding: 0.3rem;
-        }
-
-            .btn-icon:hover {
-                color: #d9531e !important;
-            }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-            background-color: white;
-        }
-
-            .header img {
-                max-height: 40px;
-            }
-
-        .navbar {
-            background-color: #f1663b;
-            padding: 15px;
-        }
-
-        .navbar-nav .nav-link {
-            font-size: 18px;
-            font-weight: bold;
-            color: white !important;
-            margin: 0 15px;
-        }
-
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: white;
-        }
-
-        .container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .footer {
-            background-color: #646464;
-            color: white;
-        }
-
-        .bg-orange {
-            background-color: #f06529 !important;
-        }
-
-        .dropdown-menu .dropdown-item:hover {
-            background-color: #e4571f !important;
-        }
-    </style>
 </head>
 <body>
 
-    <div class="header p-3 d-flex justify-content-between align-items-center bg-white border-bottom">
+    <!-- HEADER CON BOTÓN DE INICIO O DROPDOWN DE USUARIO -->
+    <header class="header p-3 d-flex justify-content-between align-items-center bg-white border-bottom">
         <img src="~/Content/images/logo.png" alt="Logo" height="40" />
-        <a class="btn btn-secondary" href="@Url.Action("Login", "Account")">Ingresar</a>
-    </div>
+        @if (User.Identity.IsAuthenticated)
+        {
+            var nombreUsuario = (User.Identity as ClaimsIdentity)?.FindFirst("NombreCompleto")?.Value ?? "Usuario";
 
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <div class="dropdown">
+                <button class="btn btn-orange dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    @nombreUsuario
+                </button>
+                <ul class="dropdown-menu bg-orange dropdown-menu-end" aria-labelledby="userDropdown">
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mx-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle fw-bold text-white" href="#" id="bodegaDropdown"
-                           role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Bodega
-                        </a>
-                        <ul class="dropdown-menu bg-orange border-0 rounded-2 shadow" aria-labelledby="bodegaDropdown">
-                            <li><a class="dropdown-item text-white fw-bold" href="@Url.Action("Index", "Productos")">Inventario</a></li>
-                            <li><a class="dropdown-item text-white fw-bold" href="@Url.Action("Index", "SalidaDeBodega")">Entrega de Materiales</a></li>
-                            <li><a class="dropdown-item text-white fw-bold" href="@Url.Action("Index", "Solicitudes")">Solicitud de Materiales</a></li>
-                            <li><a class="dropdown-item text-white fw-bold" href="@Url.Action("Index", "Reportes")">Reportes</a></li>
-                        </ul>
-                    </li>
+                    <li>
+                        <form id="logoutForm" action="@Url.Action("LogOff", "Account")" method="post" class="d-inline">
 
-                    <li class="nav-item">
-                        <a class="nav-link fw-bold text-white" href="@Url.Action("Index", "Biblioteca")">Control Documental</a>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle fw-bold text-white" href="#" id="activosDropdown"
-                           role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Control de Activos
-                        </a>
-                        <ul class="dropdown-menu bg-orange border-0 rounded-2 shadow" aria-labelledby="activosDropdown">
-                            <li><a class="dropdown-item text-white fw-bold" href="@Url.Action("Index", "FichaEmpleado")">Control de Trabajadores</a></li>
-                            <li><a class="dropdown-item text-white fw-bold" href="@Url.Action("Index", "FichaCamioneta")">Control de Camionetas</a></li>
-                        </ul>
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="dropdown-item text-white">Cerrar Sesión</button>
+                        </form>
                     </li>
                 </ul>
-
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle fw-bold text-white" href="#" id="panelDropdown"
-                           role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            PANEL CONTROL
-                        </a>
-                        <ul class="dropdown-menu bg-orange border-0 rounded-2 shadow dropdown-menu-end" aria-labelledby="panelDropdown">
-                            <li><a class="dropdown-item text-white fw-bold" href="/Usuarios">Usuarios</a></li>
-                            <li><a class="dropdown-item text-white fw-bold" href="/Proyectos">Proyectos</a></li>
-                            <li><a class="dropdown-item text-white fw-bold" href="/Proveedores">Proveedores</a></li>
-                            <li><a class="dropdown-item text-white fw-bold" href="/Empleados">Empleados</a></li>
-                            <li><a class="dropdown-item text-white fw-bold" href="/Camionetas">Camionetas</a></li>
-                        </ul>
-                    </li>
-                </ul>
-
             </div>
-        </div>
-    </nav>
+        }
+        else
+        {
+            <a href="@Url.Action("Login", "Account")" class="btn btn-orange">Ingresar</a>
 
+        }
+    </header>
+
+    <!-- NAVBAR -->
+    @if (User.Identity.IsAuthenticated)
+    {
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle fw-bold text-white" href="#" id="bodegaDropdown"
+                               role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Bodega
+                            </a>
+                            <ul class="dropdown-menu bg-orange border-0 rounded-2 shadow" aria-labelledby="bodegaDropdown">
+                                <li><a class="dropdown-item text-white fw-bold" href="@Url.Action("Index", "Productos")">Inventario</a></li>
+                                <li><a class="dropdown-item text-white fw-bold" href="@Url.Action("Index", "SalidaDeBodega")">Entrega de Materiales</a></li>
+                                <li><a class="dropdown-item text-white fw-bold" href="@Url.Action("Index", "Solicitudes")">Solicitud de Materiales</a></li>
+                                @if (User.IsInRole("Administrador") || User.IsInRole("Gerencia") || User.IsInRole("Proyectos"))
+                                {
+                                    <li><a class="dropdown-item text-white fw-bold" href="@Url.Action("Index", "Reportes")">Reportes</a></li>}
+                                </ul>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link fw-bold text-white" href="@Url.Action("Index", "Biblioteca")">Control Documental</a>
+                        </li>
+                        @if (User.IsInRole("Administrador") || User.IsInRole("Gerencia") || User.IsInRole("Proyectos"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle fw-bold text-white" href="#" id="activosDropdown"
+                                   role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Control de Activos
+                                </a>
+                                <ul class="dropdown-menu bg-orange border-0 rounded-2 shadow" aria-labelledby="activosDropdown">
+                                    <li><a class="dropdown-item text-white fw-bold" href="@Url.Action("Index", "FichaEmpleado")">Control de Trabajadores</a></li>
+                                    <li><a class="dropdown-item text-white fw-bold" href="@Url.Action("Index", "FichaCamioneta")">Control de Camionetas</a></li>
+                                </ul>
+                            </li>
+                        }
+                        </ul>
+                    @if (User.IsInRole("Administrador") || User.IsInRole("Gerencia") || User.IsInRole("Proyectos"))
+                    {
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle fw-bold text-white" href="#" id="panelDropdown"
+                                   role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    PANEL CONTROL
+                                </a>
+                                <ul class="dropdown-menu bg-orange border-0 rounded-2 shadow dropdown-menu-end" aria-labelledby="panelDropdown">
+                                    <li><a class="dropdown-item text-white fw-bold" href="/Usuarios">Usuarios</a></li>
+                                    <li><a class="dropdown-item text-white fw-bold" href="/Proyectos">Proyectos</a></li>
+                                    <li><a class="dropdown-item text-white fw-bold" href="/Proveedores">Proveedores</a></li>
+                                    <li><a class="dropdown-item text-white fw-bold" href="/Empleados">Empleados</a></li>
+                                    <li><a class="dropdown-item text-white fw-bold" href="/Camionetas">Camionetas</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    }
+
+                </div>
+            </div>
+        </nav>
+    }
 
     <div class="container mt-4">
         @RenderBody()
@@ -168,3 +128,71 @@
     @RenderSection("Scripts", required: false)
 </body>
 </html>
+
+<style>
+    .btn-orange {
+        background-color: #f06529 !important;
+        border-radius: 5px;
+        border-color: #f06529 !important;
+        color: white !important;
+    }
+
+        .btn-orange:hover {
+            background-color: #d9531e !important;
+            border-color: #d9531e !important;
+        }
+
+    .btn-icon {
+        background-color: transparent !important;
+        border: 1px solid #000000 !important;
+        color: #f06529 !important;
+        border-radius: 5px;
+        font-size: 1.2rem;
+        padding: 0.3rem;
+    }
+
+        .btn-icon:hover {
+            color: #d9531e !important;
+        }
+
+    .header img {
+        max-height: 40px;
+    }
+
+    .navbar {
+        background-color: #f1663b;
+        padding: 15px;
+    }
+
+    .navbar-nav .nav-link {
+        font-size: 18px;
+        font-weight: bold;
+        color: white !important;
+        margin: 0 15px;
+    }
+
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: white;
+    }
+
+    .container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .footer {
+        background-color: #646464;
+        color: white;
+    }
+
+    .bg-orange {
+        background-color: #f06529 !important;
+    }
+
+    .dropdown-menu .dropdown-item:hover {
+        background-color: #e4571f !important;
+    }
+</style>

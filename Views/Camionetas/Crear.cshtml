@@ -1,0 +1,109 @@
+﻿@model Inventario360.Web.Models.FichaCamioneta
+
+@{
+    ViewBag.Title = "Nueva Camioneta";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Nueva Camioneta</h2>
+    <hr style="border: 2px solid #333;" />
+
+    @using (Html.BeginForm("Crear", "Camionetas", FormMethod.Post, new { @class = "row g-3" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="col-md-4">
+            @Html.LabelFor(m => m.Patente, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Patente, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Patente, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-md-4">
+            @Html.LabelFor(m => m.Marca, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Marca, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Marca, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-md-4">
+            @Html.LabelFor(m => m.Modelo, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Modelo, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Modelo, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-md-3">
+            @Html.LabelFor(m => m.Año, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Año, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Año, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-md-3">
+            @Html.LabelFor(m => m.Color, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Color, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Color, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-md-3">
+            @Html.LabelFor(m => m.Kilometraje, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Kilometraje, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Kilometraje, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-md-3">
+            @Html.LabelFor(m => m.Estado, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Estado, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Estado, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-md-4">
+            @Html.LabelFor(m => m.ResponsableID, new { @class = "form-label" })
+            @Html.DropDownListFor(m => m.ResponsableID, ViewBag.Empleados as SelectList, "Seleccione", new { @class = "form-select" })
+            @Html.ValidationMessageFor(m => m.ResponsableID, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-md-4">
+            @Html.LabelFor(m => m.FechaPermisoCirculacion, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.FechaPermisoCirculacion, new { @class = "form-control", type = "date" })
+        </div>
+
+        <div class="col-md-4">
+            @Html.LabelFor(m => m.FechaSoap, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.FechaSoap, new { @class = "form-control", type = "date" })
+        </div>
+
+        <div class="col-md-4">
+            @Html.LabelFor(m => m.FechaAntivuelcos, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.FechaAntivuelcos, new { @class = "form-control", type = "date" })
+        </div>
+
+        <div class="col-md-4">
+            @Html.LabelFor(m => m.FechaLaminas, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.FechaLaminas, new { @class = "form-control", type = "date" })
+        </div>
+
+        <div class="col-md-4">
+            @Html.LabelFor(m => m.FechaGPS, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.FechaGPS, new { @class = "form-control", type = "date" })
+        </div>
+
+        <div class="col-md-4">
+            @Html.LabelFor(m => m.FechaMantenimiento, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.FechaMantenimiento, new { @class = "form-control", type = "date" })
+        </div>
+
+        <div class="col-md-4">
+            @Html.LabelFor(m => m.Acreditacion, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Acreditacion, new { @class = "form-control" })
+        </div>
+
+        <div class="col-12 mt-3 text-end">
+            <a href="@Url.Action("Index", "Camionetas")" class="btn btn-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-orange">Guardar</button>
+
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

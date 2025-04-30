@@ -10,7 +10,6 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Inventario360.Web.Models;
 
-
 namespace Inventario360.Web.Controllers
 {
     [Authorize]
@@ -76,16 +75,7 @@ namespace Inventario360.Web.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    var user = await UserManager.FindByEmailAsync(model.Email);
-                    if (user != null)
-                    {
-                        var identity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
-                        identity.AddClaim(new Claim("NombreCompleto", user.NombreCompleto ?? "Usuario"));
-                        AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-                        AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = model.RememberMe }, identity);
-                    }
                     return RedirectToLocal(returnUrl);
-
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:

@@ -1,0 +1,28 @@
+﻿@model Inventario360.Web.Models.FichaCamioneta
+
+@{
+    ViewBag.Title = "Eliminar Camioneta";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="text-center mt-4 text-danger">Eliminar Camioneta</h2>
+<hr />
+<p class="alert alert-warning">¿Estás seguro de que deseas eliminar esta camioneta?</p>
+
+<dl class="row">
+    <dt class="col-sm-3">Patente</dt>
+    <dd class="col-sm-9">@Model.Patente</dd>
+    <dt class="col-sm-3">Marca</dt>
+    <dd class="col-sm-9">@Model.Marca</dd>
+    <dt class="col-sm-3">Modelo</dt>
+    <dd class="col-sm-9">@Model.Modelo</dd>
+</dl>
+
+@using (Html.BeginForm("Eliminar", "Camionetas", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.ID)
+
+    <button type="submit" class="btn btn-orange">Eliminar</button>
+    <a href="@Url.Action("Index", "Camionetas")" class="btn btn-secondary">Cancelar</a>
+}

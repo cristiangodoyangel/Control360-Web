@@ -8,7 +8,10 @@ namespace Inventario360.Web.Models
 {
     
     public class ApplicationUser : IdentityUser
+
     {
+
+        public string NombreCompleto { get; set; }  // ✅ Añadido
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
            

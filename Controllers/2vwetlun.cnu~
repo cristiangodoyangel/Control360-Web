@@ -10,7 +10,6 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Inventario360.Web.Models;
 
-
 namespace Inventario360.Web.Controllers
 {
     [Authorize]

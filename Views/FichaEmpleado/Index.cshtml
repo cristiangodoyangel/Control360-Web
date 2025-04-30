@@ -84,188 +84,127 @@
         <p class="text-center mt-2 fw-bold" id="tituloGrafico"></p>
     </div>
 
-        <!-- Tablas Acreditaciones -->
+    <div class="container mt-4">
+        <h2 class="mb-4 text-center">🧾 Fichas de Empleados</h2>
+
+       
+
         <h5 class="titulo-seccion">📚 Acreditaciones</h5>
         <table id="tablaAcreditaciones" class="table table-bordered table-sm table-hover display nowrap" style="width:100%">
             <thead class="table-light text-center">
-                <tr>
-                    <th>Empleado</th>
-                    <th>Acreditaciones</th>
-                </tr>
+                <tr><th>Empleado</th><th>Acreditaciones</th></tr>
             </thead>
             <tbody>
                 @foreach (var ficha in Model)
                 {
-                    var tiene = !string.IsNullOrEmpty(ficha.Acreditaciones);
-                    var claseFila = tiene ? "table-success" : "table-danger";
+                    var claseFila = string.IsNullOrEmpty(ficha.Acreditaciones) ? "table-danger" : "table-success";
                     <tr class="@claseFila">
-                        <td>
-                            @if (ficha.Empleado == null)
-                            {
-                                <span>Empleado es NULL</span>
-                            }
-                            else if (string.IsNullOrEmpty(ficha.Empleado.Nombre))
-                            {
-                                <span>Nombre de Empleado es vacío</span>
-                            }
-                            else
-                            {
-                                @ficha.Empleado.Nombre
-                            }
-                        </td>
-                        <td>@(tiene ? ficha.Acreditaciones : "N/A")</td>
+                        <td>@(ficha.Empleado?.Nombre ?? "Sin nombre")</td>
+                        <td>@(string.IsNullOrEmpty(ficha.Acreditaciones) ? "N/A" : ficha.Acreditaciones)</td>
                     </tr>
                 }
             </tbody>
         </table>
 
-        <!-- Tablas Curso Altura -->
         <h5 class="titulo-seccion">🧗 Curso de Altura</h5>
         <table id="tablaAltura" class="table table-bordered table-sm table-hover display nowrap" style="width:100%">
             <thead class="table-light text-center">
-                <tr>
-                    <th>Empleado</th>
-                    <th>Curso Altura</th>
-                </tr>
+                <tr><th>Empleado</th><th>Curso Altura</th></tr>
             </thead>
             <tbody>
                 @foreach (var ficha in Model)
                 {
-                    var tiene = !string.IsNullOrEmpty(ficha.Acreditaciones);
-                    var claseFila = tiene ? "table-success" : "table-danger";
+                    var claseFila = ficha.CursoAltura ? "table-success" : "table-danger";
                     <tr class="@claseFila">
-                        <td>
-                            @if (ficha.Empleado == null)
-                            {
-                                <span>Empleado es NULL</span>
-                            }
-                            else if (string.IsNullOrEmpty(ficha.Empleado.Nombre))
-                            {
-                                <span>Nombre de Empleado es vacío</span>
-                            }
-                            else
-                            {
-                                @ficha.Empleado.Nombre
-                            }
-                        </td>
-                        <td>@(tiene ? ficha.Acreditaciones : "N/A")</td>
+                        <td>@(ficha.Empleado?.Nombre ?? "Sin nombre")</td>
+                        <td>@(ficha.CursoAltura ? "✅ Sí" : "❌ No")</td>
                     </tr>
                 }
             </tbody>
         </table>
 
-        <!-- Tablas Contrato -->
         <h5 class="titulo-seccion">📄 Contrato</h5>
         <table id="tablaContrato" class="table table-bordered table-sm table-hover display nowrap" style="width:100%">
             <thead class="table-light text-center">
-                <tr>
-                    <th>Empleado</th>
-                    <th>Contrato Vence</th>
-                </tr>
+                <tr><th>Empleado</th><th>Contrato Vence</th></tr>
             </thead>
             <tbody>
                 @foreach (var ficha in Model)
                 {
-                    var tiene = !string.IsNullOrEmpty(ficha.Acreditaciones);
-                    var claseFila = tiene ? "table-success" : "table-danger";
+                    var dias = ficha.FechaTerminoContrato?.Subtract(DateTime.Now).TotalDays ?? 999;
+                    var claseFila = dias <= 0 ? "table-danger" : dias <= 30 ? "table-warning" : "table-success";
                     <tr class="@claseFila">
-                        <td>
-                            @if (ficha.Empleado == null)
-                            {
-                                <span>Empleado es NULL</span>
-                            }
-                            else if (string.IsNullOrEmpty(ficha.Empleado.Nombre))
-                            {
-                                <span>Nombre de Empleado es vacío</span>
-                            }
-                            else
-                            {
-                                @ficha.Empleado.Nombre
-                            }
-                        </td>
-                        <td>@(tiene ? ficha.Acreditaciones : "N/A")</td>
+                        <td>@(ficha.Empleado?.Nombre ?? "Sin nombre")</td>
+                        <td>@(ficha.FechaTerminoContrato?.ToString("dd-MM-yyyy") ?? "N/A")</td>
                     </tr>
                 }
             </tbody>
         </table>
 
-        <!-- Tablas Examen -->
         <h5 class="titulo-seccion">🩺 Examen</h5>
         <table id="tablaExamen" class="table table-bordered table-sm table-hover display nowrap" style="width:100%">
             <thead class="table-light text-center">
-                <tr>
-                    <th>Empleado</th>
-                    <th>Examen Vence</th>
-                </tr>
+                <tr><th>Empleado</th><th>Examen Vence</th></tr>
             </thead>
             <tbody>
                 @foreach (var ficha in Model)
                 {
-                    var tiene = !string.IsNullOrEmpty(ficha.Acreditaciones);
-                    var claseFila = tiene ? "table-success" : "table-danger";
+                    var dias = ficha.FechaVencimientoExamen?.Subtract(DateTime.Now).TotalDays ?? 999;
+                    var claseFila = dias <= 0 ? "table-danger" : dias <= 30 ? "table-warning" : "table-success";
                     <tr class="@claseFila">
-                        <td>
-                            @if (ficha.Empleado == null)
-                            {
-                                <span>Empleado es NULL</span>
-                            }
-                            else if (string.IsNullOrEmpty(ficha.Empleado.Nombre))
-                            {
-                                <span>Nombre de Empleado es vacío</span>
-                            }
-                            else
-                            {
-                                @ficha.Empleado.Nombre
-                            }
-                        </td>
-                        <td>@(tiene ? ficha.Acreditaciones : "N/A")</td>
+                        <td>@(ficha.Empleado?.Nombre ?? "Sin nombre")</td>
+                        <td>@(ficha.FechaVencimientoExamen?.ToString("dd-MM-yyyy") ?? "N/A")</td>
                     </tr>
                 }
             </tbody>
         </table>
 
-        <!-- Modal -->
-        <div class="modal fade" id="modalEditarEmpleados" tabindex="-1" aria-labelledby="modalEditarLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header bg-dark text-white">
-                        <h5 class="modal-title" id="modalEditarLabel">Editar Trabajadores</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                    </div>
-                    <div class="modal-body">
-                        <table class="table table-bordered table-sm table-hover">
-                            <thead class="table-light text-center">
+        <partial name="_ModalEditarEmpleados" model="Model" />
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalEditarEmpleados" tabindex="-1" aria-labelledby="modalEditarLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title" id="modalEditarLabel">Editar Trabajadores</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered table-sm table-hover">
+                        <thead class="table-light text-center">
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Contrato</th>
+                                <th>Examen</th>
+                                <th>Curso Altura</th>
+                                <th>Acreditaciones</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var ficha in Model)
+                            {
                                 <tr>
-                                    <th>Nombre</th>
-                                    <th>Contrato</th>
-                                    <th>Examen</th>
-                                    <th>Curso Altura</th>
-                                    <th>Acreditaciones</th>
-                                    <th>Acciones</th>
+                                    <td>@ficha.Empleado?.Nombre</td>
+                                    <td>@(ficha.FechaTerminoContrato?.ToString("dd-MM-yyyy") ?? "N/A")</td>
+                                    <td>@(ficha.FechaVencimientoExamen?.ToString("dd-MM-yyyy") ?? "N/A")</td>
+                                    <td>@(ficha.CursoAltura ? "✅" : "❌")</td>
+                                    <td>@(string.IsNullOrEmpty(ficha.Acreditaciones) ? "N/A" : ficha.Acreditaciones)</td>
+                                    <td><a href="@Url.Action("Editar", "FichaEmpleado", new { id = ficha.ID })" class="btn btn-sm btn-orange">Editar</a></td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var ficha in Model)
-                                {
-                                    <tr>
-                                        <td>@ficha.Empleado?.Nombre</td>
-                                        <td>@(ficha.FechaTerminoContrato?.ToString("dd-MM-yyyy") ?? "N/A")</td>
-                                        <td>@(ficha.FechaVencimientoExamen?.ToString("dd-MM-yyyy") ?? "N/A")</td>
-                                        <td>@(ficha.CursoAltura ? "✅" : "❌")</td>
-                                        <td>@(string.IsNullOrEmpty(ficha.Acreditaciones) ? "N/A" : ficha.Acreditaciones)</td>
-                                        <td><a href="@Url.Action("Editar", "FichaEmpleado", new { id = ficha.ID })" class="btn btn-sm btn-orange">Editar</a></td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    </div>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
     @section Scripts {
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

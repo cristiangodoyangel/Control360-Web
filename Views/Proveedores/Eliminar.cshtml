@@ -1,0 +1,28 @@
+﻿@model Inventario360.Web.Models.Proveedor
+
+@{
+    ViewBag.Title = "Eliminar Proveedor";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Eliminar Proveedor</h2>
+    <p>¿Estás seguro que deseas eliminar este proveedor?</p>
+
+    <dl class="row">
+        <dt class="col-sm-2">Nombre</dt>
+        <dd class="col-sm-10">@Model.Nombre</dd>
+
+        <dt class="col-sm-2">Contacto</dt>
+        <dd class="col-sm-10">@Model.Contacto</dd>
+    </dl>
+
+    @using (Html.BeginForm("Eliminar", "Proveedores", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.ID)
+
+        <button type="submit" class="btn btn-orange">Eliminar</button>
+        <a href="@Url.Action("Index", "Proveedores")" class="btn btn-secondary ms-2">Cancelar</a>
+    }
+</div>

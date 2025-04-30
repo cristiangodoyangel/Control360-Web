@@ -48,12 +48,16 @@ namespace Inventario360.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        public async Task<ActionResult> Editar(int id)
+        public async Task<ActionResult> Editar(int? id)
         {
-            var proyecto = await _proyectoService.ObtenerPorId(id);
+            if (id == null) return RedirectToAction("Index");
+
+            var proyecto = await _proyectoService.ObtenerPorId(id.Value);
             if (proyecto == null) return HttpNotFound();
+
             return View(proyecto);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

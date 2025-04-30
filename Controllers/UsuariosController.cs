@@ -51,6 +51,7 @@ namespace Inventario360.Web.Controllers
             }).ToList();
 
             return View(new CrearUsuarioViewModel());
+
         }
 
         [HttpPost]
