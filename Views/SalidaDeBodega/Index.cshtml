@@ -61,7 +61,7 @@
         </div>
     </div>
 
-<!-- Modal Confirmación -->
+
 <div class="modal fade" id="confirmarEliminarModal" tabindex="-1" aria-labelledby="confirmarEliminarLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -131,14 +131,14 @@
 
       $("#btnConfirmarEliminar").click(function () {
     if (salidaIdAEliminar) {
-        var token = $('input[name="__RequestVerificationToken"]').val(); // 👈 Capturamos el token del formulario
+        var token = $('input[name="__RequestVerificationToken"]').val();
 
         $.ajax({
             url: '@Url.Action("Eliminar", "SalidaDeBodega")',
             type: "POST",
             data: {
                 id: salidaIdAEliminar,
-                __RequestVerificationToken: token // 👈 Enviamos también el token
+                __RequestVerificationToken: token 
             },
             success: function (response) {
                 if (response.success) {

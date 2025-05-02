@@ -41,13 +41,21 @@
     </div>*@
 
 <h5 class="titulo-seccion mt-5">📊 Estado Documental</h5>
-<div style="width: 50%; border: 1px solid #ccc; margin: 20px auto; ">
-    <div class="d-flex justify-content-center align-items-center gap-3" style="min-height: 420px;">
-        <button id="prevGrafico" class="btn btn-orange"><i class="fas fa-chevron-left"></i></button>
+
+<div class="grafico-container mx-auto my-4">
+    <p class="text-center mt-2 fw-bold" id="tituloGrafico">Por Vencer</p>
+
+    <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap">
+
         <canvas id="graficoCamionetas" class="grafico-camionetas"></canvas>
-        <button id="nextGrafico" class="btn btn-orange"><i class="fas fa-chevron-right"></i></button>
+
+        <button id="prevGrafico" class="btn btn-orange">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button id="nextGrafico" class="btn btn-orange">
+            <i class="fas fa-chevron-right"></i>
+        </button>
     </div>
-    <p class="text-center mt-2 fw-bold" id="tituloGrafico"></p>
 </div>
 
 
@@ -236,9 +244,43 @@
     .grafico-camionetas {
         max-width: 600px;
         height: 400px;
-        width: 100% !important;
-        display: block;
+        width: 100% !important;    
         background-color: white;
         padding: 10px;
+    }
+
+    .grafico-container {
+        width: 100%;
+        max-width: 600px;
+        border: 1px solid #ccc;
+        padding: 10px;
+    }
+
+    .grafico-camionetas {
+        width: 100%;
+        max-width: 300px;
+        height: auto;
+        max-height: 250px;
+    }
+
+    @@media (max-width: 776px) {
+        .grafico-container {
+            padding: 10px 5px;
+        }
+
+        .grafico-camionetas {
+            max-width: 100%;
+            max-height: 250px;
+        }
+
+        #prevGrafico, #nextGrafico {
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
+            padding: 0;
+            margin: 5px;
+        }
+
+    
     }
 </style>

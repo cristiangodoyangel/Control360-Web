@@ -8,7 +8,7 @@
     Solicitud de Materiales
 </h2>
 
-<div class="mb-3">
+<div class="mb-5 btn-group-responsive">
     <button type="button" class="btn btn-secondary" id="btnAgregarInventario" data-bs-toggle="modal" data-bs-target="#modalInventario">
         Agregar desde Inventario
     </button>
@@ -18,24 +18,29 @@
     </button>
 </div>
 
-<table id="tablaSolicitudes" class="table table-striped mt-3">
-    <thead>
-        <tr>
-            <th>Nombre del Material</th>
-            <th>Cantidad</th>
-            <th>Medida</th>
-            <th>Unidad de Medida</th>
-            <th>Marca</th>
-            <th>Descripción</th>
-            <th>Imagen del Producto</th>
-            <th>Posible Proveedor</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        <!-- Las filas serán agregadas dinámicamente con JavaScript -->
-    </tbody>
-</table>
+
+
+<div class="table-responsive">
+    <table id="tablaSolicitudes" class="table table-striped mt-3">
+        <thead>
+            <tr>
+                <th>Nombre del Material</th>
+                <th>Cantidad</th>
+                <th>Medida</th>
+                <th>Unidad de Medida</th>
+                <th>Marca</th>
+                <th>Descripción</th>
+                <th>Imagen del Producto</th>
+                <th>Posible Proveedor</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Las filas serán agregadas dinámicamente con JavaScript -->
+        </tbody>
+    </table>
+</div>
+
 
 <!-- Modal para agregar producto no listado -->
 <div class="modal fade" id="modalNuevoProducto" tabindex="-1" aria-labelledby="modalNuevoProductoLabel" aria-hidden="true">
@@ -50,36 +55,36 @@
                     <input type="hidden" id="ITEM" />
                     <div class="mb-3 text-center">
                         <label class="form-label d-block">Nombre del Material</label>
-                        <input type="text" class="form-control mx-auto", style = "max-width: 600px;" id="NombreTecnico">
+                        <input type="text" class="form-control mx-auto" , style="max-width: 600px;" id="NombreTecnico">
                     </div>
                     <div class="mb-3 text-center">
                         <label class="form-label">Cantidad</label>
-                        <input type="number" class="form-control mx-auto", style = "max-width: 600px;" id="Cantidad" required>
+                        <input type="number" class="form-control mx-auto" , style="max-width: 600px;" id="Cantidad" required>
                     </div>
                     <div class="mb-3 text-center">
                         <label class="form-label">Medida</label>
-                        <input type="text" class="form-control mx-auto", style = "max-width: 600px;" id="Medida" required>
+                        <input type="text" class="form-control mx-auto" , style="max-width: 600px;" id="Medida" required>
                     </div>
                     <div class="mb-3 text-center">
                         <label class="form-label">Unidad de Medida</label>
-                        <input type="text" class="form-control mx-auto", style = "max-width: 600px;" id="UnidadMedida" required>
+                        <input type="text" class="form-control mx-auto" , style="max-width: 600px;" id="UnidadMedida" required>
                     </div>
                     <div class="mb-3 text-center">
                         <label class="form-label">Marca</label>
-                        <input type="text" class="form-control mx-auto", style = "max-width: 600px;" id="Marca">
+                        <input type="text" class="form-control mx-auto" , style="max-width: 600px;" id="Marca">
                     </div>
                     <div class="mb-3 text-center">
                         <label class="form-label">Descripción</label>
-                        <textarea class="form-control mx-auto", style = "max-width: 600px;" id="Descripcion"></textarea>
+                        <textarea class="form-control mx-auto" , style="max-width: 600px;" id="Descripcion"></textarea>
                     </div>
                     <div class="mb-3 text-center">
                         <label class="form-label">Imagen del Producto</label>
-                        <input type="file" class="form-control mx-auto", style = "max-width: 600px;" id="ImagenInput" accept="image/*">
+                        <input type="file" class="form-control mx-auto" , style="max-width: 600px;" id="ImagenInput" accept="image/*">
                         <img id="PreviewImagen" src="" alt="Imagen del Producto" style="display:none; max-width:150px; margin-top:10px;">
                     </div>
                     <div class="mb-3 text-center">
                         <label class="form-label">Proveedor</label>
-                        <select id="Proveedor" class="form-control mx-auto", style = "max-width: 600px;">
+                        <select id="Proveedor" class="form-control mx-auto" , style="max-width: 600px;">
                             <option value="">Seleccione un proveedor</option>
                             @foreach (var proveedor in ViewBag.Proveedores)
                             {
@@ -98,6 +103,8 @@
     </div>
 </div>
 
+
+<!-- Modal para seleccionar productos desde el inventario -->
 <!-- Modal para seleccionar productos desde el inventario -->
 <div class="modal fade" id="modalInventario" tabindex="-1" aria-labelledby="modalInventarioLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
@@ -107,25 +114,27 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <table id="tablaInventario" class="table table-striped table-bordered nowrap" width="100%">
-                    <thead>
-                        <tr>
-                            <th>Seleccionar</th>
-                            <th>Nombre</th>
-                            <th>Cantidad</th>
-                            <th>Medida</th>
-                            <th>Unidad de Medida</th>
-                            <th>Marca</th>
-                            <th class="d-none">Descripción</th>
-                            <th>Ubicación</th>
-                            <th>Estado</th>
-                            <th>Imagen</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Datos dinámicos -->
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table id="tablaInventario" class="table table-striped table-bordered" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Seleccionar</th>
+                                <th>Nombre</th>
+                                <th>Cantidad</th>
+                                <th>Medida</th>
+                                <th>Unidad de Medida</th>
+                                <th>Marca</th>
+                                <th class="d-none">Descripción</th>
+                                <th>Ubicación</th>
+                                <th>Estado</th>
+                                <th>Imagen</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Datos dinámicos -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -133,6 +142,8 @@
         </div>
     </div>
 </div>
+
+
 
 
 <!-- Botón "Crear Solicitud de Material" ubicado abajo a la derecha -->
@@ -185,16 +196,16 @@
                     }
 
                     let newRow = `<tr>
-                            <td>${nombre}</td>
-                            <td><input type="number" class="form-control cantidad-input" value="${cantidad}" min="1" style="width: 80px;"></td>
-                            <td>${medida}</td>
-                            <td>${unidadMedida}</td>
-                            <td>${marca}</td>
-                            <td>${descripcion}</td>
-                            <td><img src="${imagenSrc}" alt="Imagen Producto" class="producto-img" style="max-width: 50px;"></td>
-                            <td>${proveedorNombre}</td>
-                            <td><button class="btn btn-secondary btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
-                        </tr>`;
+                                                            <td>${nombre}</td>
+                                                            <td><input type="number" class="form-control cantidad-input" value="${cantidad}" min="1" style="width: 80px;"></td>
+                                                            <td>${medida}</td>
+                                                            <td>${unidadMedida}</td>
+                                                            <td>${marca}</td>
+                                                            <td>${descripcion}</td>
+                                                            <td><img src="${imagenSrc}" alt="Imagen Producto" class="producto-img" style="max-width: 50px;"></td>
+                                                            <td>${proveedorNombre}</td>
+                                                            <td><button class="btn btn-secondary btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
+                                                        </tr>`;
                     tbody.insertAdjacentHTML("beforeend", newRow);
 
                     let modal = bootstrap.Modal.getInstance(document.getElementById("modalNuevoProducto"));
@@ -280,17 +291,17 @@
                     data.forEach(producto => {
                         let imagenSrc = producto.imagen?.trim() ? `/images/${producto.imagen}` : "/images/no-image.png";
                         let row = `<tr>
-                    <td><button type="button" class="btn btn-sm btn-orange" onclick="seleccionarProducto('${producto.ITEM}', '${producto.NombreTecnico}', '${producto.Cantidad}', '${producto.Medida}', '${producto.UnidadMedida}', '${producto.Marca}', '${producto.Ubicacion}', '${producto.Estado}', '${producto.Imagen}', '${producto.Descripcion}')">Seleccionar</button></td>
-                    <td>${producto.NombreTecnico || '-'}</td>
-                    <td>${producto.Cantidad || '-'}</td>
-                    <td>${producto.Medida || '-'}</td>
-                    <td>${producto.UnidadMedida || '-'}</td>
-                    <td>${producto.Marca || '-'}</td>
-                    <td class="d-none">${producto.Descripcion || '-'}</td>
-                    <td>${producto.Ubicacion || '-'}</td>
-                    <td>${producto.Estado || '-'}</td>
-                    <td><img src="${imagenSrc}" class="producto-img" alt="Imagen"></td>
-                </tr>`;
+                                                    <td><button type="button" class="btn btn-sm btn-orange" onclick="seleccionarProducto('${producto.ITEM}', '${producto.NombreTecnico}', '${producto.Cantidad}', '${producto.Medida}', '${producto.UnidadMedida}', '${producto.Marca}', '${producto.Ubicacion}', '${producto.Estado}', '${producto.Imagen}', '${producto.Descripcion}')">Seleccionar</button></td>
+                                                    <td>${producto.NombreTecnico || '-'}</td>
+                                                    <td>${producto.Cantidad || '-'}</td>
+                                                    <td>${producto.Medida || '-'}</td>
+                                                    <td>${producto.UnidadMedida || '-'}</td>
+                                                    <td>${producto.Marca || '-'}</td>
+                                                    <td class="d-none">${producto.Descripcion || '-'}</td>
+                                                    <td>${producto.Ubicacion || '-'}</td>
+                                                    <td>${producto.Estado || '-'}</td>
+                                                    <td><img src="${imagenSrc}" class="producto-img" alt="Imagen"></td>
+                                                </tr>`;
 
                         tbody.innerHTML += row;
                     });
@@ -316,16 +327,16 @@
             let imagenSrc = imagen?.trim() ? `/images/${imagen}` : "/images/no-image.png";
 
             let newRow = `<tr>
-                    <td>${nombre}</td>
-                    <td><input type="number" class="form-control cantidad-input" value="1" min="1" style="width: 80px;"></td>
-                    <td>${medida}</td>
-                    <td>${unidadMedida}</td>
-                    <td>${marca}</td>
-                    <td>${descripcion}</td>
-                    <td><img src="${imagenSrc}" alt="Imagen Producto" class="producto-img" style="max-width: 50px;"></td>
-                    <td>${proveedorNombre}</td>
-                    <td><button class="btn btn-secondary btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
-                </tr>`;
+                                                    <td>${nombre}</td>
+                                                    <td><input type="number" class="form-control cantidad-input" value="1" min="1" style="width: 80px;"></td>
+                                                    <td>${medida}</td>
+                                                    <td>${unidadMedida}</td>
+                                                    <td>${marca}</td>
+                                                    <td>${descripcion}</td>
+                                                    <td><img src="${imagenSrc}" alt="Imagen Producto" class="producto-img" style="max-width: 50px;"></td>
+                                                    <td>${proveedorNombre}</td>
+                                                    <td><button class="btn btn-secondary btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
+                                                </tr>`;
             tbody.insertAdjacentHTML("beforeend", newRow);
 
             let modal = bootstrap.Modal.getInstance(document.getElementById("modalInventario"));
@@ -416,5 +427,57 @@
         text-align: center;
         vertical-align: middle;
         padding: 8px;
+    }
+
+
+    /* Responsive solo muestra 2 columnas bajo 700px */
+    @@media (max-width: 700px) {
+        #tablaInventario th:nth-child(3),
+        #tablaInventario th:nth-child(4),
+        #tablaInventario th:nth-child(5),
+        #tablaInventario th:nth-child(6),
+        #tablaInventario th:nth-child(7),
+        #tablaInventario th:nth-child(8),
+        #tablaInventario th:nth-child(9),
+        #tablaInventario th:nth-child(10),
+        #tablaInventario td:nth-child(3),
+        #tablaInventario td:nth-child(4),
+        #tablaInventario td:nth-child(5),
+        #tablaInventario td:nth-child(6),
+        #tablaInventario td:nth-child(7),
+        #tablaInventario td:nth-child(8),
+        #tablaInventario td:nth-child(9),
+        #tablaInventario td:nth-child(10) {
+            display: none !important;
+        }
+    }
+
+    @@media (max-width: 700px) {
+        #tablaSolicitudes th:nth-child(4),
+        #tablaSolicitudes th:nth-child(5),
+        #tablaSolicitudes th:nth-child(6),
+        #tablaSolicitudes th:nth-child(7),
+        #tablaSolicitudes th:nth-child(8),
+        #tablaSolicitudes th:nth-child(9),
+        #tablaSolicitudes td:nth-child(4),
+        #tablaSolicitudes td:nth-child(5),
+        #tablaSolicitudes td:nth-child(6),
+        #tablaSolicitudes td:nth-child(7),
+        #tablaSolicitudes td:nth-child(8),
+        #tablaSolicitudes td:nth-child(9) {
+            display: none !important;
+        }
+    }
+
+    @@media (max-width: 700px) {
+        .btn-group-responsive {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+            .btn-group-responsive .btn {
+                width: 100%;
+            }
     }
 </style>

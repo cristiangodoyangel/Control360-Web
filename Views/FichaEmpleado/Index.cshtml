@@ -73,16 +73,25 @@
             <a href="@Url.Action("Crear")" class="btn btn-orange me-2">Nueva Ficha</a>
             <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalEditarEmpleados">Editar</button>
         </div>*@
-
     <h5 class="titulo-seccion mt-5">📊 Estado Documental</h5>
-    <div style="width: 50%; border: 1px solid #ccc; margin: 20px auto; ">
-        <div class="d-flex justify-content-center align-items-center gap-3" style="min-height: 420px;">
-            <button id="prevGrafico" class="btn btn-orange"><i class="fas fa-chevron-left"></i></button>
+
+    <div class="grafico-container mx-auto my-4">
+        <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap">
+            <p class="text-center mt-2 fw-bold" id="tituloGrafico"></p>
+
             <canvas id="graficoCarrusel" class="grafico-carrusel"></canvas>
-            <button id="nextGrafico" class="btn btn-orange"><i class="fas fa-chevron-right"></i></button>
+            <button id="prevGrafico" class="btn btn-orange">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button id="nextGrafico" class="btn btn-orange">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+
+
         </div>
-        <p class="text-center mt-2 fw-bold" id="tituloGrafico"></p>
+       
     </div>
+
 
     <div class="container mt-4">
         <h2 class="mb-4 text-center">🧾 Fichas de Empleados</h2>
@@ -300,7 +309,16 @@
         </script>
     }
 
-    <style>
+<style>
+
+        .grafico-carrusel {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            max-height: 300px; /* 🔒 Evita que crezca sin control */
+            margin: 0 auto;
+        }
+
         .titulo-seccion {
             background-color: #f06529;
             color: white;
@@ -325,4 +343,12 @@
             background-color: white;
             padding: 10px;
         }
-    </style>
+
+        @@media (max-width: 576px) {
+    .grafico-carrusel {
+        max-width: 100%;
+        max-height: 250px;
+    }
+}
+
+</style>

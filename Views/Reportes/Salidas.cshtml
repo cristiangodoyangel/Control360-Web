@@ -14,6 +14,8 @@
         Resumen de Salidas de Bodega
     </h2>
 
+    <a href="@Url.Action("Index", "Reportes")" class="btn btn-secondary mb-3">&#8592; Volver al Resumen</a>
+
     <div class="mb-4 d-flex justify-content-center">
         <label for="selectMes" class="me-2 fw-bold">Seleccionar Mes:</label>
         <select id="selectMes" class="form-select w-auto">
@@ -64,9 +66,11 @@
         </div>
     </div>
 
-    <div class="text-center mt-3">
-        <a href="@Url.Action("Index", "Reportes")" class="btn btn-secondary">Volver a Reportes</a>
-        <button id="btnImprimir" class="btn btn-secondary">&#128438; Imprimir</button>
+    <div class="d-flex justify-content-between mb-3">
+        <button id="btnExportarInventario" class="btn btn-orange">&#128190; Descargar Excel</button>
+        <div class="text-end mt-4 d-none d-md-block">
+            <button class="btn btn-primary" onclick="window.print()">Imprimir</button>
+        </div>
     </div>
 </div>
 
