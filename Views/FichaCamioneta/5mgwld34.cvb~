@@ -42,24 +42,24 @@
 
 <h5 class="titulo-seccion mt-5">📊 Estado Documental</h5>
 
-   <div class="grafico-container mx-auto my-4">
-       <div class="d-flex flex-column align-items-center gap-3">
-           <p class="text-center mt-2 fw-bold" id="tituloGrafico"></p>
+<div class="grafico-container mx-auto my-4">
+    <div class="d-flex flex-column align-items-center gap-3">
+        <p class="text-center mt-2 fw-bold" id="tituloGrafico"></p>
 
-           <canvas id="graficoCamionetas" class="grafico-camionetas"></canvas>
+        <canvas id="graficoCamionetas" class="grafico-camioneta"></canvas>
 
-           <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap">
-               <button id="prevGrafico" class="btn btn-orange">
-                   <i class="fas fa-chevron-left"></i>
-               </button>
-               <button id="nextGrafico" class="btn btn-orange">
-                   <i class="fas fa-chevron-right"></i>
-               </button>
-           </div>
-
+        <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap">
+            <button id="prevGrafico" class="btn btn-orange">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button id="nextGrafico" class="btn btn-orange">
+                <i class="fas fa-chevron-right"></i>
+            </button>
         </div>
 
-   </div>
+    </div>
+
+</div>
 
 
 
@@ -248,7 +248,6 @@
         padding: 6px;
     }
 
-
     .grafico-camionetas {
         width: 100%;
         max-width: 400px;
@@ -256,6 +255,9 @@
         max-height: 300px; /* 🔒 Evita que crezca sin control */
         margin: 0 auto;
     }
+
+  max-height: 250px;{}
+    
 
     @@media (max-width: 776px) {
         .grafico-container {

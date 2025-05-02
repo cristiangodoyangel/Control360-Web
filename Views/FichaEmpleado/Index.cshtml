@@ -76,25 +76,27 @@
     <h5 class="titulo-seccion mt-5">📊 Estado Documental</h5>
 
     <div class="grafico-container mx-auto my-4">
-        <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap">
+        <div class="d-flex flex-column align-items-center gap-3">
             <p class="text-center mt-2 fw-bold" id="tituloGrafico"></p>
 
             <canvas id="graficoCarrusel" class="grafico-carrusel"></canvas>
-            <button id="prevGrafico" class="btn btn-orange">
-                <i class="fas fa-chevron-left"></i>
-            </button>
-            <button id="nextGrafico" class="btn btn-orange">
-                <i class="fas fa-chevron-right"></i>
-            </button>
 
+            <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap">
+                <button id="prevGrafico" class="btn btn-orange">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button id="nextGrafico" class="btn btn-orange">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
 
-        </div>
-       
+         </div>
+
     </div>
 
 
     <div class="container mt-4">
-        <h2 class="mb-4 text-center">🧾 Fichas de Empleados</h2>
+       
 
 
 
@@ -335,14 +337,7 @@
             padding: 6px;
         }
 
-        .grafico-camionetas {
-            max-width: 600px;
-            height: 400px;
-            width: 100% !important;
-            display: block;
-            background-color: white;
-            padding: 10px;
-        }
+      
 
         @@media (max-width: 576px) {
     .grafico-carrusel {

@@ -93,7 +93,7 @@ namespace Inventario360.Web.Controllers
                 nombreTecnico = p.NombreTecnico,
                 descripcion = p.Descripcion ?? "",
                 marca = p.Marca ?? "",
-                imagen = p.Imagen ?? "",
+                imagen = p.Imagen ?? "".ToLowerInvariant(),
                 posibleProveedor = p.Proveedor ?? 0
             }).ToList();
 

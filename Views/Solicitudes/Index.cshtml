@@ -288,8 +288,12 @@
                     let tbody = document.querySelector("#tablaInventario tbody");
                     tbody.innerHTML = "";
 
+                    console.log("Productos recibidos:", data);
+
+
                     data.forEach(producto => {
-                        let imagenSrc = producto.imagen?.trim() ? `/images/${producto.imagen}` : "/images/no-image.png";
+                        let imagenSrc = producto.Imagen?.trim() ? `/images/${producto.Imagen}` : "/images/no-image.png";
+
                         let row = `<tr>
                                                     <td><button type="button" class="btn btn-sm btn-orange" onclick="seleccionarProducto('${producto.ITEM}', '${producto.NombreTecnico}', '${producto.Cantidad}', '${producto.Medida}', '${producto.UnidadMedida}', '${producto.Marca}', '${producto.Ubicacion}', '${producto.Estado}', '${producto.Imagen}', '${producto.Descripcion}')">Seleccionar</button></td>
                                                     <td>${producto.NombreTecnico || '-'}</td>
